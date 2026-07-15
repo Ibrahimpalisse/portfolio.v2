@@ -1,0 +1,198 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Palette beige chaude — cohérente avec la section À propos */
+  --color-background: #faf8f4;
+  --color-foreground: #2c251f;
+  --color-card: #fffdf9;
+  --color-muted: #f2ece4;
+  --color-border: #e5dcd0;
+  --color-primary: #4a3f35;
+  --color-primary-foreground: #faf8f4;
+  --color-accent: #a8875c;
+  --color-profile: #ebe3d6;
+  --color-step-accent: #a8875c;
+  --color-step-surface: #f3ede4;
+
+  --font-sans: var(--font-display-serif);
+  --font-mono: var(--font-geist-mono);
+
+  --radius: 0.85rem;
+
+  --animate-aurora: aurora 18s linear infinite;
+  --animate-marquee: marquee 35s linear infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+}
+
+.dark {
+  --color-background: #131110;
+  --color-foreground: #f0ebe3;
+  --color-card: #1c1916;
+  --color-muted: #252119;
+  --color-border: #3a342c;
+  --color-primary: #e8dfd2;
+  --color-primary-foreground: #131110;
+  --color-accent: #c9a876;
+  --color-profile: #2a2520;
+  --color-step-accent: #c9a876;
+  --color-step-surface: #1a1714;
+}
+
+@keyframes aurora {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  font-size: 16px;
+  scrollbar-gutter: stable;
+  overflow-x: clip;
+}
+
+/* Scrollbar — teinte beige */
+html,
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-step-accent) 35%, transparent)
+    transparent;
+}
+
+html::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+html::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-step-accent) 30%, transparent);
+  border-radius: 100px;
+  transition: background-color 0.2s ease;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-step-accent) 65%, transparent);
+}
+
+html::-webkit-scrollbar-corner,
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.scrollbar-overlay {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-overlay::-webkit-scrollbar {
+  display: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus,
+.sr-only:focus-visible {
+  position: fixed;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-display-serif), "Cormorant Garamond", Georgia, serif;
+  font-feature-settings: "liga" 1, "dlig" 1;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-step-accent) 35%, transparent);
+  color: var(--color-foreground);
+}
+
+.text-gradient {
+  background: linear-gradient(
+    105deg,
+    var(--color-step-accent),
+    color-mix(in srgb, var(--color-step-accent) 45%, var(--color-foreground))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.font-brand {
+  font-family: var(--font-display-serif), "Cormorant Garamond", Georgia, serif;
+  font-feature-settings: "liga" 1, "dlig" 1;
+}
+
+.font-name {
+  font-family: var(--font-name), "Segoe Script", cursive;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
+.font-display-serif {
+  font-family: var(--font-display-serif), "Cormorant Garamond", Georgia, serif;
+  font-feature-settings: "liga" 1, "dlig" 1;
+}

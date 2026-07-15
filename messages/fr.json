@@ -1,0 +1,273 @@
+{
+  "meta": {
+    "title": "Développeur Web",
+    "description": "Développeur web, back-end & designer freelance. Sites et applications sur-mesure par Vignes Ibrahim.",
+    "jobTitle": "Développeur web freelance"
+  },
+  "nav": {
+    "services": "Services",
+    "projects": "Projets",
+    "about": "À propos",
+    "reviews": "Avis",
+    "leaveReview": "Laisser un avis",
+    "workTogether": "Travaillons ensemble",
+    "menu": "Menu"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "networks": "Réseaux",
+    "preferredContact": "Contact préféré · Discord",
+    "leaveReview": "Laisser un avis",
+    "legal": "Mentions légales",
+    "rights": "Tous droits réservés.",
+    "socialSoon": "{label} — bientôt disponible",
+    "socialConfig": "{label} — lien à configurer"
+  },
+  "home": {
+    "contact": "Me contacter",
+    "projects": "Voir mes projets",
+    "scroll": "Défiler"
+  },
+  "hero": {
+    "tagline": "Sites web sur-mesure",
+    "bio": "Développeur web, back-end & designer. 2 ans et demi à coder par passion — et mon premier client récemment. Je transforme vos idées en sites modernes."
+  },
+  "heroCube": {
+    "dragHint": "Glissez ou touchez pour pivoter · le thème suit la face visible",
+    "themeHint": "Le thème change avec la face jour / nuit du cube",
+    "ariaLabel": "Cube interactif — faces jour et nuit"
+  },
+  "services": {
+    "eyebrow": "Services",
+    "title": "Ce que je peux",
+    "titleHighlight": "faire pour vous",
+    "subtitle": "Du design à la mise en ligne, des solutions claires pensées pour votre activité.",
+    "items": {
+      "web": {
+        "title": "Création de sites web",
+        "desc": "Votre site vitrine ou application, moderne et facile à utiliser. Rapide, clair et pensé pour transformer vos visiteurs en clients."
+      },
+      "backend": {
+        "title": "Systèmes & données",
+        "desc": "Tout ce qui fait fonctionner votre site en coulisses : comptes, formulaires, gestion des informations. Fiable et prêt à évoluer avec vous."
+      },
+      "design": {
+        "title": "Design sur-mesure",
+        "desc": "Une identité visuelle qui vous ressemble. Mise en page soignée et parcours simple pour donner envie à vos visiteurs de vous contacter."
+      },
+      "mobile": {
+        "title": "Adapté à tous les écrans",
+        "desc": "Votre site s'affiche parfaitement sur téléphone, tablette et ordinateur. Vos clients vous trouvent où qu'ils soient."
+      },
+      "seo": {
+        "title": "Visible sur Google",
+        "desc": "Votre site est optimisé pour être trouvé facilement sur les moteurs de recherche. Plus de visibilité, plus de contacts qualifiés."
+      },
+      "maintenance": {
+        "title": "Suivi & maintenance",
+        "desc": "Un site toujours rapide et à jour. Je reste disponible après la mise en ligne pour corriger, améliorer et vous accompagner."
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "À propos",
+    "title": "Un partenaire de confiance pour votre",
+    "titleHighlight": "présence en ligne",
+    "p1": "Je m'appelle {name}. Développeur web, back-end et designer freelance, je code depuis 2 ans et demi par passion — des projets perso, des essais, de la veille : c'est comme ça que j'ai construit mon niveau technique.",
+    "p2": "J'ai récemment accompagné mon premier client. Aujourd'hui, je propose mes services pour créer des sites et applications sur-mesure, clairs et efficaces.",
+    "stats": {
+      "years": "Ans à coder",
+      "clients": "Client accompagné",
+      "projects": "Projets personnels",
+      "response": "Délai de réponse"
+    }
+  },
+  "process": {
+    "step1": {
+      "title": "Échange & cadrage",
+      "desc": "On prend le temps de comprendre votre activité, vos objectifs et votre public. Chaque projet démarre par une vision claire et des priorités définies ensemble."
+    },
+    "step2": {
+      "title": "Design sur-mesure",
+      "desc": "Maquettes, validation visuelle puis développement : une présence en ligne élégante, cohérente avec votre image et pensée pour convertir vos visiteurs."
+    },
+    "step3": {
+      "title": "Lancement & accompagnement",
+      "desc": "Mise en ligne, tests finaux et suivi après lancement. Votre site reste rapide, fiable et évolutif — avec un interlocuteur unique à chaque étape."
+    }
+  },
+  "projects": {
+    "eyebrow": "Réalisations",
+    "title": "Mes derniers",
+    "titleHighlight": "projets",
+    "subtitle": "Un aperçu de mes réalisations — ouvrez une carte pour voir le détail.",
+    "seeMore": "Voir plus",
+    "seeSite": "Voir le site",
+    "screens": "écrans",
+    "all": "Tous",
+    "empty": "Aucun projet dans cette catégorie.",
+    "keyboardHint": "— flèches ← → du clavier",
+    "swipeHint": "Glissez pour voir les autres projets",
+    "prevProject": "Projet précédent",
+    "nextProject": "Projet suivant",
+    "goToProject": "Aller au projet {index}",
+    "prevImage": "Image précédente",
+    "nextImage": "Image suivante",
+    "goToImage": "Aller à l'image {index}",
+    "thumbnail": "Miniature {index}",
+    "page": {
+      "metaTitle": "Projets — {brand}",
+      "metaDescription": "Découvrez les réalisations {brand} : sites vitrine, e-commerce et applications web sur-mesure.",
+      "eyebrow": "Portfolio",
+      "title": "Tous mes",
+      "titleHighlight": "projets",
+      "subtitle": "Filtrez par type de projet et cliquez pour voir les détails."
+    },
+    "categories": {
+      "personal": "Projet perso"
+    },
+    "items": {
+      "nova": {
+        "title": "Nova — Dashboard SaaS",
+        "desc": "Concept d'application analytics : tableau de bord clair, graphiques et navigation pensée pour une lecture rapide.",
+        "images": {
+          "home": "Page d'accueil",
+          "dashboard": "Tableau de bord",
+          "mobile": "Version mobile"
+        }
+      },
+      "maison-belle": {
+        "title": "Maison Belle — E-commerce",
+        "desc": "Maquette de boutique en ligne : catalogue, fiche produit et parcours d'achat simplifié.",
+        "images": {
+          "shop": "Boutique",
+          "product": "Fiche produit"
+        }
+      },
+      "atelier-lumiere": {
+        "title": "Atelier Lumière — Vitrine",
+        "desc": "Site vitrine pour un studio créatif : galerie immersive et formulaire de contact intégré.",
+        "images": {
+          "home": "Accueil",
+          "gallery": "Galerie"
+        }
+      },
+      "fitpro": {
+        "title": "FitPro — Coaching sportif",
+        "desc": "Concept de plateforme coaching : landing page, programmes et espace membre.",
+        "images": {
+          "landing": "Landing page",
+          "member": "Espace membre"
+        }
+      }
+    }
+  },
+  "reviews": {
+    "eyebrow": "Témoignages",
+    "title": "Ils me font",
+    "titleHighlight": "confiance",
+    "empty": "Soyez le premier à laisser un avis.",
+    "one": "Un avis publié — partagez le vôtre après validation.",
+    "many": "avis publiés{suffix}.",
+    "previewSuffix": " — aperçu ci-dessous",
+    "seeMore": "Voir plus",
+    "leaveReview": "Laisser un avis",
+    "nonePublished": "Aucun avis publié pour le moment.",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "page": "Page {current} sur {total}",
+    "stars": "{rating} sur 5 étoiles"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Donnons vie à",
+    "titleHighlight": "votre projet",
+    "subtitle": "Parlez-moi de votre idée. Je vous réponds sous 48h avec une proposition claire.",
+    "name": "Votre nom",
+    "email": "Votre email",
+    "message": "Votre message",
+    "namePlaceholder": "Jean Dupont",
+    "emailPlaceholder": "vous@exemple.fr",
+    "messagePlaceholder": "Décrivez votre projet, vos objectifs, votre délai...",
+    "send": "Envoyer ma demande",
+    "openForm": "Me contacter",
+    "sending": "Envoi en cours...",
+    "successTitle": "Message envoyé !",
+    "successBody": "Je vous réponds sous 48h.",
+    "orEmail": "Ou écrivez-moi directement à",
+    "formAria": "Formulaire de contact",
+    "turnstileError": "Complétez la vérification anti-spam avant d'envoyer.",
+    "error": "Impossible d'envoyer le message. Réessayez.",
+    "privacy": "En envoyant ce formulaire, vous acceptez d'être recontacté par email."
+  },
+  "reviewForm": {
+    "eyebrow": "Avis client",
+    "title": "Partagez votre",
+    "titleHighlight": "expérience",
+    "subtitle": "Vous avez travaillé avec {name} ? Laissez un avis. Il sera publié sur le portfolio après validation.",
+    "backToReviews": "Retour aux avis",
+    "name": "Votre nom",
+    "email": "Votre email",
+    "role": "Votre activité ou entreprise",
+    "review": "Votre avis",
+    "rating": "Votre note",
+    "starAria": "{count, plural, one {# étoile} other {# étoiles}}",
+    "namePlaceholder": "Jean Dupont",
+    "emailPlaceholder": "vous@exemple.fr (optionnel)",
+    "rolePlaceholder": "Freelance, startup… (optionnel)",
+    "messagePlaceholder": "Qu'avez-vous apprécié ? Décrivez votre expérience…",
+    "send": "Envoyer mon avis",
+    "sending": "Envoi en cours...",
+    "successTitle": "Merci pour votre avis !",
+    "successBody": "Je le publierai prochainement sur la page témoignages.",
+    "consent": "En envoyant, vous acceptez la publication de votre prénom et avis sur ce portfolio.",
+    "formAria": "Formulaire d'avis client",
+    "turnstileError": "Complétez la vérification anti-spam avant d'envoyer."
+  },
+  "validation": {
+    "invalidRequest": "Requête invalide.",
+    "nameTooShort": "Nom trop court.",
+    "nameTooShortMin": "Nom trop court (2 caractères min.).",
+    "nameTooLong": "Nom trop long.",
+    "emailRequired": "Email requis.",
+    "emailInvalid": "Email invalide.",
+    "emailTooLong": "Email trop long.",
+    "messageTooShort": "Message trop court.",
+    "messageTooShortMin": "Message trop court (10 caractères min.).",
+    "messageTooLong": "Message trop long.",
+    "roleTooLong": "Activité trop longue.",
+    "ratingRequired": "Choisissez une note entre 1 et 5 étoiles.",
+    "ratingInvalid": "Note invalide.",
+    "ratingInvalidRange": "Note invalide (1 à 5).",
+    "cooldown": "Veuillez patienter quelques secondes avant de renvoyer.",
+    "mailTooLong": "Message trop long pour l'envoi par email. Écrivez-moi directement.",
+    "rateLimited": "Trop de tentatives. Réessayez dans quelques minutes.",
+    "checkFields": "Vérifiez les champs et réessayez.",
+    "networkError": "Une erreur est survenue. Réessayez ou écrivez-moi par email.",
+    "turnstileFailed": "Vérification anti-spam échouée. Réessayez.",
+    "sendFailed": "Envoi impossible pour le moment.",
+    "serviceUnavailable": "Service temporairement indisponible.",
+    "unauthorized": "Requête non autorisée."
+  },
+  "common": {
+    "skipToContent": "Aller au contenu",
+    "loading": "Chargement",
+    "backHome": "Retour à l'accueil",
+    "closeModal": "Fermer la modale",
+    "language": "Langue",
+    "themeLight": "Activer le mode clair",
+    "themeDark": "Activer le mode sombre",
+    "themeToggle": "Changer de thème"
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "ar": "العربية"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "desc": "Cette page n'existe pas ou a été déplacée.",
+    "back": "Retour à l'accueil"
+  }
+}

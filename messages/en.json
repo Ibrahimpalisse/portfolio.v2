@@ -1,0 +1,273 @@
+{
+  "meta": {
+    "title": "Web Developer",
+    "description": "Freelance web developer, backend engineer & designer. Custom websites and applications by Vignes Ibrahim.",
+    "jobTitle": "Freelance web developer"
+  },
+  "nav": {
+    "services": "Services",
+    "projects": "Projects",
+    "about": "About",
+    "reviews": "Reviews",
+    "leaveReview": "Leave a review",
+    "workTogether": "Let's work together",
+    "menu": "Menu"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "networks": "Social",
+    "preferredContact": "Preferred contact · Discord",
+    "leaveReview": "Leave a review",
+    "legal": "Legal notice",
+    "rights": "All rights reserved.",
+    "socialSoon": "{label} — coming soon",
+    "socialConfig": "{label} — link to configure"
+  },
+  "home": {
+    "contact": "Contact me",
+    "projects": "View my projects",
+    "scroll": "Scroll"
+  },
+  "hero": {
+    "tagline": "Custom websites",
+    "bio": "Web developer, backend & designer. Two and a half years of coding out of passion — and my first client recently. I turn your ideas into modern websites."
+  },
+  "heroCube": {
+    "dragHint": "Drag or touch to rotate · theme follows the visible face",
+    "themeHint": "Theme switches with the cube's light / dark face",
+    "ariaLabel": "Interactive cube — light and dark faces"
+  },
+  "services": {
+    "eyebrow": "Services",
+    "title": "What I can",
+    "titleHighlight": "do for you",
+    "subtitle": "From design to launch, clear solutions built for your business.",
+    "items": {
+      "web": {
+        "title": "Website creation",
+        "desc": "Your showcase site or app, modern and easy to use. Fast, clear and built to turn visitors into clients."
+      },
+      "backend": {
+        "title": "Systems & data",
+        "desc": "Everything behind the scenes: accounts, forms, data management. Reliable and ready to scale with you."
+      },
+      "design": {
+        "title": "Custom design",
+        "desc": "A visual identity that reflects you. Polished layouts and simple journeys that encourage contact."
+      },
+      "mobile": {
+        "title": "All screen sizes",
+        "desc": "Your site looks perfect on phone, tablet and desktop. Clients find you wherever they are."
+      },
+      "seo": {
+        "title": "Visible on Google",
+        "desc": "Your site is optimized to be found on search engines. More visibility, more qualified leads."
+      },
+      "maintenance": {
+        "title": "Support & maintenance",
+        "desc": "A site that stays fast and up to date. I'm available after launch to fix, improve and support you."
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "A trusted partner for your",
+    "titleHighlight": "online presence",
+    "p1": "My name is {name}. Freelance web developer, backend engineer and designer — I've been coding for two and a half years out of passion: side projects, experiments and learning shaped my technical level.",
+    "p2": "I recently supported my first client. Today I offer my services to build custom, clear and effective websites and applications.",
+    "stats": {
+      "years": "Years coding",
+      "clients": "Client supported",
+      "projects": "Personal projects",
+      "response": "Response time"
+    }
+  },
+  "process": {
+    "step1": {
+      "title": "Discovery & scope",
+      "desc": "We take time to understand your business, goals and audience. Every project starts with a clear vision and shared priorities."
+    },
+    "step2": {
+      "title": "Custom design",
+      "desc": "Mockups, visual approval then development: an elegant online presence aligned with your brand and built to convert."
+    },
+    "step3": {
+      "title": "Launch & support",
+      "desc": "Go-live, final tests and post-launch follow-up. Your site stays fast, reliable and evolvable — with one point of contact throughout."
+    }
+  },
+  "projects": {
+    "eyebrow": "Work",
+    "title": "My latest",
+    "titleHighlight": "projects",
+    "subtitle": "A preview of my work — open a card to see details.",
+    "seeMore": "See more",
+    "seeSite": "Visit site",
+    "screens": "screens",
+    "all": "All",
+    "empty": "No projects in this category.",
+    "keyboardHint": "— ← → keyboard arrows",
+    "swipeHint": "Swipe to see more projects",
+    "prevProject": "Previous project",
+    "nextProject": "Next project",
+    "goToProject": "Go to project {index}",
+    "prevImage": "Previous image",
+    "nextImage": "Next image",
+    "goToImage": "Go to image {index}",
+    "thumbnail": "Thumbnail {index}",
+    "page": {
+      "metaTitle": "Projects — {brand}",
+      "metaDescription": "Explore {brand}'s work: showcase sites, e-commerce and custom web applications.",
+      "eyebrow": "Portfolio",
+      "title": "All my",
+      "titleHighlight": "projects",
+      "subtitle": "Filter by project type and click to see details."
+    },
+    "categories": {
+      "personal": "Personal project"
+    },
+    "items": {
+      "nova": {
+        "title": "Nova — SaaS Dashboard",
+        "desc": "Analytics app concept: clear dashboard, charts and navigation designed for quick reading.",
+        "images": {
+          "home": "Home page",
+          "dashboard": "Dashboard",
+          "mobile": "Mobile version"
+        }
+      },
+      "maison-belle": {
+        "title": "Maison Belle — E-commerce",
+        "desc": "Online store mockup: catalog, product page and a simplified checkout flow.",
+        "images": {
+          "shop": "Shop",
+          "product": "Product page"
+        }
+      },
+      "atelier-lumiere": {
+        "title": "Atelier Lumière — Showcase",
+        "desc": "Showcase site for a creative studio: immersive gallery and integrated contact form.",
+        "images": {
+          "home": "Home",
+          "gallery": "Gallery"
+        }
+      },
+      "fitpro": {
+        "title": "FitPro — Sports coaching",
+        "desc": "Coaching platform concept: landing page, programs and member area.",
+        "images": {
+          "landing": "Landing page",
+          "member": "Member area"
+        }
+      }
+    }
+  },
+  "reviews": {
+    "eyebrow": "Testimonials",
+    "title": "They trust",
+    "titleHighlight": "me",
+    "empty": "Be the first to leave a review.",
+    "one": "One review published — share yours after approval.",
+    "many": "reviews published{suffix}.",
+    "previewSuffix": " — preview below",
+    "seeMore": "See more",
+    "leaveReview": "Leave a review",
+    "nonePublished": "No reviews published yet.",
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page {current} of {total}",
+    "stars": "{rating} out of 5 stars"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Let's bring",
+    "titleHighlight": "your project to life",
+    "subtitle": "Tell me about your idea. I'll reply within 48 hours with a clear proposal.",
+    "name": "Your name",
+    "email": "Your email",
+    "message": "Your message",
+    "namePlaceholder": "John Smith",
+    "emailPlaceholder": "you@example.com",
+    "messagePlaceholder": "Describe your project, goals and timeline...",
+    "send": "Send my request",
+    "openForm": "Contact me",
+    "sending": "Sending...",
+    "successTitle": "Message sent!",
+    "successBody": "I'll reply within 48 hours.",
+    "orEmail": "Or email me directly at",
+    "formAria": "Contact form",
+    "turnstileError": "Complete the anti-spam check before sending.",
+    "error": "Could not send the message. Please try again.",
+    "privacy": "By submitting this form, you agree to be contacted by email."
+  },
+  "reviewForm": {
+    "eyebrow": "Client review",
+    "title": "Share your",
+    "titleHighlight": "experience",
+    "subtitle": "Worked with {name}? Leave a review. It will be published on the portfolio after approval.",
+    "backToReviews": "Back to reviews",
+    "name": "Your name",
+    "email": "Your email",
+    "role": "Your role or company",
+    "review": "Your review",
+    "rating": "Your rating",
+    "starAria": "{count, plural, one {# star} other {# stars}}",
+    "namePlaceholder": "John Smith",
+    "emailPlaceholder": "you@example.com (optional)",
+    "rolePlaceholder": "Freelancer, startup… (optional)",
+    "messagePlaceholder": "What did you appreciate? Describe your experience…",
+    "send": "Submit my review",
+    "sending": "Sending...",
+    "successTitle": "Thank you for your review!",
+    "successBody": "I'll publish it soon on the testimonials page.",
+    "consent": "By submitting, you agree to publish your first name and review on this portfolio.",
+    "formAria": "Client review form",
+    "turnstileError": "Complete the anti-spam check before sending."
+  },
+  "validation": {
+    "invalidRequest": "Invalid request.",
+    "nameTooShort": "Name is too short.",
+    "nameTooShortMin": "Name is too short (2 characters minimum).",
+    "nameTooLong": "Name is too long.",
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Invalid email address.",
+    "emailTooLong": "Email is too long.",
+    "messageTooShort": "Message is too short.",
+    "messageTooShortMin": "Message is too short (10 characters minimum).",
+    "messageTooLong": "Message is too long.",
+    "roleTooLong": "Role or company name is too long.",
+    "ratingRequired": "Please choose a rating between 1 and 5 stars.",
+    "ratingInvalid": "Invalid rating.",
+    "ratingInvalidRange": "Invalid rating (1 to 5).",
+    "cooldown": "Please wait a few seconds before submitting again.",
+    "mailTooLong": "Message is too long to send by email. Please email me directly.",
+    "rateLimited": "Too many attempts. Please try again in a few minutes.",
+    "checkFields": "Please check the fields and try again.",
+    "networkError": "Something went wrong. Please try again or email me directly.",
+    "turnstileFailed": "Anti-spam verification failed. Please try again.",
+    "sendFailed": "Could not send right now. Please try again later.",
+    "serviceUnavailable": "Service temporarily unavailable.",
+    "unauthorized": "Unauthorized request."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "loading": "Loading",
+    "backHome": "Back to home",
+    "closeModal": "Close dialog",
+    "language": "Language",
+    "themeLight": "Switch to light mode",
+    "themeDark": "Switch to dark mode",
+    "themeToggle": "Toggle theme"
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "ar": "العربية"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "desc": "This page doesn't exist or has been moved.",
+    "back": "Back to home"
+  }
+}
