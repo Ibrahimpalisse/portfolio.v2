@@ -36,14 +36,19 @@ export const TurnstileWidget = forwardRef<TurnstileWidgetHandle, TurnstileWidget
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
     const containerRef = useRef<HTMLDivElement>(null);
     const widgetIdRef = useRef<string | null>(null);
+    const onTokenRef = useRef(onToken);
+    const onExpireRef = useRef(onExpire);
     const [scriptReady, setScriptReady] = useState(false);
 
+    onTokenRef.current = onToken;
+    onExpireRef.current = onExpire;
+
     const reset = useCallback(() => {
-      onExpire();
+      onExpireRef.current();
       if (widgetIdRef.current && window.turnstile) {
         window.turnstile.reset(widgetIdRef.current);
       }
-    }, [onExpire]);
+    }, []);
 
     useImperativeHandle(ref, () => ({ reset }), [reset]);
 
@@ -58,9 +63,9 @@ export const TurnstileWidget = forwardRef<TurnstileWidgetHandle, TurnstileWidget
 
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
-        callback: onToken,
-        "expired-callback": onExpire,
-        "error-callback": onExpire,
+        callback: (token) => onTokenRef.current(token),
+        "expired-callback": () => onExpireRef.current(),
+        "error-callback": () => onExpireRef.current(),
         theme: "auto",
       });
 
@@ -70,7 +75,7 @@ export const TurnstileWidget = forwardRef<TurnstileWidgetHandle, TurnstileWidget
           widgetIdRef.current = null;
         }
       };
-    }, [siteKey, scriptReady, onToken, onExpire]);
+    }, [siteKey, scriptReady]);
 
     if (!siteKey) return null;
 
