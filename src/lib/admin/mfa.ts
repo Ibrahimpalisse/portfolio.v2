@@ -104,6 +104,17 @@ export type AdminMfaEnrollment = {
   secret: string;
 };
 
+/** Nom affiché dans l’app TOTP (Google Authenticator, etc.). */
+function totpIssuerFromSiteUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://zishi.dev";
+  try {
+    const host = new URL(raw).hostname.replace(/^www\./, "");
+    return host || "zishi.dev";
+  } catch {
+    return "zishi.dev";
+  }
+}
+
 /** Démarre l'enrôlement TOTP (QR). Nettoie les facteurs non vérifiés restants. */
 export async function startAdminMfaEnrollment(
   supabase: SupabaseClient
@@ -127,6 +138,8 @@ export async function startAdminMfaEnrollment(
   const { data, error } = await supabase.auth.mfa.enroll({
     factorType: "totp",
     friendlyName: "Admin portfolio",
+    // Évite d’afficher localhost:3000 dans l’app TOTP (défaut = Site URL Supabase).
+    issuer: totpIssuerFromSiteUrl(),
   });
 
   if (error || !data || data.type !== "totp" || !data.totp) {
