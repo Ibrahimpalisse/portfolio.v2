@@ -28,10 +28,10 @@ export function HomeSection() {
   return (
     <section
       id="accueil"
-      className="relative flex min-h-[100dvh] w-full max-w-[100vw] flex-col overflow-x-clip bg-background"
+      className="relative flex min-h-0 w-full max-w-[100vw] flex-col overflow-x-clip bg-background sm:min-h-[100dvh]"
     >
-      <div className="relative z-10 flex flex-1 flex-col justify-center px-4 pb-20 pt-28 sm:px-6 sm:pb-24 sm:pt-28">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 xl:gap-16">
+      <div className="relative z-10 flex flex-1 flex-col justify-center px-4 pb-10 pt-24 sm:px-6 sm:pb-24 sm:pt-28">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-6 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 xl:gap-16">
           <div className="relative flex w-full flex-col items-center lg:items-start rtl:lg:items-end">
             <div className="relative w-full max-w-xl lg:max-w-none">
               <HeroTypewriter onComplete={() => setHeroReady(true)} />
@@ -52,7 +52,7 @@ export function HomeSection() {
                 ...enterTransition,
                 delay: reduceMotion ? 0 : 0.55,
               }}
-              className="mt-8 flex w-full max-w-sm flex-col gap-3 sm:mt-9 sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start rtl:lg:justify-end"
+              className="mt-5 flex w-full max-w-sm flex-col gap-2.5 sm:mt-9 sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 lg:justify-start rtl:lg:justify-end"
             >
               <Button asChild size="lg" className="w-full sm:w-auto">
                 <ContactOpenLink>{t("contact")}</ContactOpenLink>
@@ -67,7 +67,7 @@ export function HomeSection() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.12, ease: enterEase }}
-            className="relative mx-auto w-full max-w-2xl overflow-visible lg:mx-0 lg:max-w-none"
+            className="relative mx-auto w-full max-w-[16rem] overflow-visible sm:max-w-2xl lg:mx-0 lg:max-w-none"
           >
             <HeroBanner3D />
           </motion.div>
@@ -86,7 +86,7 @@ export function HomeSection() {
         >
           <a
             href={homeAnchors.services}
-            className="mx-auto mt-10 flex flex-col items-center gap-1 text-foreground/40 transition-colors hover:text-foreground sm:mt-12"
+            className="mx-auto mt-6 flex flex-col items-center gap-1 text-foreground/40 transition-colors hover:text-foreground sm:mt-12"
             aria-label={t("scroll")}
           >
             <span className="text-xs uppercase tracking-widest">{t("scroll")}</span>

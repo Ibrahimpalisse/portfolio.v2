@@ -14,7 +14,7 @@ import { FooterLeaveReviewLink } from "@/components/footer-leave-review-link";
 import { Link } from "@/i18n/navigation";
 import { brand, getFooterSocials, type FooterSocialId } from "@/lib/brand";
 import { getPublicContactEmail } from "@/lib/social/store";
-import { routes } from "@/lib/routes";
+import { homeSectionUrl, routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 const socialIcons: Record<
@@ -50,9 +50,9 @@ export async function Footer() {
   const year = new Date().getFullYear();
 
   const navLinks = [
-    { label: tNav("services"), href: routes.services },
+    { label: tNav("services"), href: homeSectionUrl("services") },
     { label: tNav("projects"), href: routes.projects },
-    { label: tNav("about"), href: routes.about },
+    { label: tNav("about"), href: homeSectionUrl("about") },
     { label: tNav("reviews"), href: routes.reviews },
   ];
 

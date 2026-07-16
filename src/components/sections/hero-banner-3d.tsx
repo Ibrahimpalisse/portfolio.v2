@@ -405,7 +405,7 @@ export function HeroBanner3D({ className }: HeroBanner3DProps) {
   return (
     <div
       className={cn(
-        "relative w-full select-none overflow-visible px-1 py-4 sm:px-3 sm:py-10",
+        "relative w-full select-none overflow-visible px-1 py-2 sm:px-3 sm:py-10",
         className
       )}
     >
@@ -416,7 +416,7 @@ export function HeroBanner3D({ className }: HeroBanner3DProps) {
         />
       )}
 
-      <div className="relative mx-auto aspect-square w-full max-w-[min(100%,20rem)] overflow-visible sm:max-w-none sm:aspect-[16/10] [perspective:1000px]">
+      <div className="relative mx-auto aspect-square w-full max-w-[min(100%,14rem)] overflow-visible sm:max-w-none sm:aspect-[16/10] [perspective:1000px]">
         <div
           ref={cubeSizerRef}
           className={cn(

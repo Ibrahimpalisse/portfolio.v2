@@ -28,13 +28,13 @@ function HeroTextGhost({ tagline, bio }: { tagline: string; bio: string }) {
       className="pointer-events-none invisible flex select-none flex-col items-center text-center lg:items-start lg:text-left rtl:lg:items-end rtl:lg:text-right"
       aria-hidden
     >
-      <div className="mb-3 sm:mb-4">
-        <BrandName className="pb-0.5 text-[2rem] leading-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]" />
+      <div className="mb-2 sm:mb-4">
+        <BrandName className="pb-0.5 text-[1.65rem] leading-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]" />
       </div>
-      <h1 className="font-display-serif text-[2.15rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+      <h1 className="font-display-serif text-[1.75rem] font-semibold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
         <span className="text-gradient">{tagline}</span>
       </h1>
-      <p className="mt-5 max-w-md text-base leading-relaxed text-foreground/60 sm:mt-6 sm:text-lg">
+      <p className="mt-3 max-w-md text-sm leading-relaxed text-foreground/60 sm:mt-6 sm:text-lg">
         {bio}
       </p>
     </div>
@@ -106,13 +106,13 @@ export function HeroTypewriter({ onComplete }: HeroTypewriterProps = {}) {
   if (reduceMotion) {
     return (
       <div className="flex flex-col items-center text-center lg:items-start lg:text-left rtl:lg:items-end rtl:lg:text-right">
-        <div className="mb-3 sm:mb-4">
-          <BrandName className="pb-0.5 text-[2rem] leading-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]" />
+        <div className="mb-2 sm:mb-4">
+          <BrandName className="pb-0.5 text-[1.65rem] leading-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]" />
         </div>
-        <h1 className="font-display-serif text-[2.15rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="font-display-serif text-[1.75rem] font-semibold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
           <span className="text-gradient">{tagline}</span>
         </h1>
-        <p className="mt-5 max-w-md text-base leading-relaxed text-foreground/60 sm:mt-6 sm:text-lg">
+        <p className="mt-3 max-w-md text-sm leading-relaxed text-foreground/60 sm:mt-6 sm:text-lg">
           {bio}
         </p>
       </div>
@@ -137,12 +137,12 @@ export function HeroTypewriter({ onComplete }: HeroTypewriterProps = {}) {
           "absolute inset-0 flex flex-col items-center text-center lg:items-start lg:text-left rtl:lg:items-end rtl:lg:text-right"
         )}
       >
-        <div className="mb-3 sm:mb-4">
-          <BrandName className="pb-0.5 text-[2rem] leading-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]" length={nameLen} />
+        <div className="mb-2 sm:mb-4">
+          <BrandName className="pb-0.5 text-[1.65rem] leading-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]" length={nameLen} />
           <TypewriterCursor active={typing && lineIndex === 0} />
         </div>
 
-        <h1 className="font-display-serif text-[2.15rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="font-display-serif text-[1.75rem] font-semibold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
           {lineIndex >= 1 && (
             <>
               <span className="text-gradient">{typedTagline}</span>
@@ -151,7 +151,7 @@ export function HeroTypewriter({ onComplete }: HeroTypewriterProps = {}) {
           )}
         </h1>
 
-        <p className="mt-5 max-w-md text-base leading-relaxed text-foreground/60 sm:mt-6 sm:text-lg">
+        <p className="mt-3 max-w-md text-sm leading-relaxed text-foreground/60 sm:mt-6 sm:text-lg">
           {lineIndex >= 2 && (
             <>
               {typedBio}

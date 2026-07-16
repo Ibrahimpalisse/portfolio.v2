@@ -148,8 +148,19 @@ function handleAdminMfaRateLimit(request: NextRequest) {
   return NextResponse.next();
 }
 
+/** Anciennes pages → sections de l’accueil. */
+const HOME_SECTION_REDIRECTS: Record<string, string> = {
+  "/services": "/#services",
+  "/a-propos": "/#a-propos",
+};
+
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
+
+  const homeSection = HOME_SECTION_REDIRECTS[path];
+  if (homeSection) {
+    return NextResponse.redirect(new URL(homeSection, request.url), 308);
+  }
 
   if (path === "/api/contact" || path === "/api/review") {
     return handleFormRateLimit(request);

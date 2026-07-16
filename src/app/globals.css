@@ -79,6 +79,7 @@ html {
   font-size: 16px;
   scrollbar-gutter: stable;
   overflow-x: clip;
+  scroll-behavior: smooth;
 }
 
 /* Pendant une modale : plus de bande réservée / barre de scroll */

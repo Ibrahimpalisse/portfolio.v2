@@ -3,9 +3,7 @@ import { brand } from "@/lib/brand";
 /** Chemins canoniques du site — URLs SEO en français, sans slash final. */
 export const routes = {
   home: "/",
-  services: "/services",
   projects: "/projets",
-  about: "/a-propos",
   reviews: "/avis",
   leaveReview: "/laisser-un-avis",
   contact: "/contact",

@@ -22,14 +22,13 @@ const serviceIcons = {
   maintenance: Rocket,
 } as const;
 
-export function Services({ variant = "section" }: { variant?: "section" | "page" } = {}) {
+export function Services() {
   const t = useTranslations("services");
-  const HeadingTag = variant === "page" ? "h1" : "h2";
 
   return (
     <section
       id="services"
-      className="relative bg-step-surface px-4 py-20 sm:px-6 sm:py-24 lg:py-28"
+      className="relative scroll-mt-28 bg-step-surface px-4 py-20 sm:px-6 sm:py-24 lg:py-28"
     >
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-3xl text-center">
@@ -39,10 +38,10 @@ export function Services({ variant = "section" }: { variant?: "section" | "page"
             </span>
           </Reveal>
           <Reveal delay={0.05}>
-            <HeadingTag className="mt-4 font-display-serif text-3xl font-semibold tracking-tight sm:mt-5 sm:text-4xl md:text-5xl">
+            <h2 className="mt-4 font-display-serif text-3xl font-semibold tracking-tight sm:mt-5 sm:text-4xl md:text-5xl">
               {t("title")}{" "}
               <span className="text-gradient">{t("titleHighlight")}</span>
-            </HeadingTag>
+            </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-4 text-base leading-relaxed text-foreground/60 sm:mt-5 sm:text-lg">

@@ -11,7 +11,7 @@ import { ContactOpenLink } from "@/components/contact-open-link";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { openLeaveReviewModal } from "@/lib/open-leave-review-modal";
-import { routes } from "@/lib/routes";
+import { homeSectionUrl, routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 function NavLink({
@@ -50,9 +50,9 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { label: t("services"), href: routes.services },
+    { label: t("services"), href: homeSectionUrl("services") },
     { label: t("projects"), href: routes.projects },
-    { label: t("about"), href: routes.about },
+    { label: t("about"), href: homeSectionUrl("about") },
     { label: t("reviews"), href: routes.reviews },
     { label: t("leaveReview"), href: "#", openReview: true },
   ] as const;

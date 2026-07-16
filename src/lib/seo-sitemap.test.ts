@@ -5,12 +5,19 @@ import robots from "@/app/robots";
 import { createPageMetadata, routes } from "@/lib/routes";
 
 describe("SEO — sitemap & robots", () => {
-  it("sitemap inclut services et à-propos (pages réelles)", () => {
+  it("sitemap inclut l’accueil et les pages indexables (sans /services ni /a-propos)", () => {
     const entries = sitemap();
     const urls = entries.map((e) => e.url);
-    assert.ok(urls.some((u) => u.endsWith("/services")));
-    assert.ok(urls.some((u) => u.endsWith("/a-propos")));
-    assert.ok(urls.some((u) => u.endsWith("/projets")));
+    assert.ok(urls.some((u) => /\/projets$/.test(u)));
+    assert.ok(urls.some((u) => /\/avis$/.test(u)));
+    assert.equal(
+      urls.some((u) => u.includes("/services")),
+      false
+    );
+    assert.equal(
+      urls.some((u) => u.includes("/a-propos")),
+      false
+    );
     assert.equal(
       urls.some((u) => u.includes("laisser-un-avis")),
       false
@@ -33,11 +40,14 @@ describe("SEO — sitemap & robots", () => {
     const meta = createPageMetadata({
       title: "Test",
       description: "Desc",
-      path: routes.services,
+      path: routes.projects,
     });
-    assert.equal(meta.alternates?.canonical?.toString().includes("/services"), true);
+    assert.equal(
+      meta.alternates?.canonical?.toString().includes("/projets"),
+      true
+    );
     assert.equal(meta.twitter?.card, "summary_large_image");
-    assert.equal(meta.openGraph?.url?.toString().includes("/services"), true);
+    assert.equal(meta.openGraph?.url?.toString().includes("/projets"), true);
   });
 
   it("leave-review est noindex via metadata helper", () => {
