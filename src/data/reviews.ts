@@ -18,8 +18,8 @@ function initialsFromName(name: string) {
 }
 
 /**
- * DONNÉES DÉMO — Remplacez par de vrais avis clients validés avant la mise en prod.
- * Publication manuelle : ajoutez un objet ici après validation (email / admin).
+ * Fallback démo si Supabase / table reviews non configurés.
+ * En production avec BDD : seuls les avis `published` (validés admin) s'affichent.
  */
 export const reviews: ReviewItem[] = [
   {

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { brand } from "@/lib/brand";
 import { createPageMetadata, routes } from "@/lib/routes";
+import { getSiteProjects } from "@/lib/projects/site";
+import type { Locale } from "@/i18n/routing";
 
 const ProjectsPage = dynamic(
   () => import("@/components/sections/projects-page").then((m) => m.ProjectsPage)
@@ -23,6 +25,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-export default function ProjetsRoute() {
-  return <ProjectsPage />;
+export default async function ProjetsRoute() {
+  const locale = (await getLocale()) as Locale;
+  const projects = await getSiteProjects(locale);
+  return <ProjectsPage projects={projects} />;
 }

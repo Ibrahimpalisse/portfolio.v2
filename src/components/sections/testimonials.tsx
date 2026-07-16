@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { PenLine, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { AnimatedNumber } from "@/components/ui/animated-number";
@@ -8,14 +9,20 @@ import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
 import { ReviewCard } from "@/components/sections/review-card";
+import { ReviewDetailModal } from "@/components/sections/review-detail-modal";
 import { Link } from "@/i18n/navigation";
-import { reviews } from "@/data/reviews";
+import type { ReviewItem } from "@/data/reviews";
 import { getHomeGridClass, HOME_SECTION_PREVIEW } from "@/lib/home-layout";
 import { markHomeForScrollRestore } from "@/lib/lock-body-scroll";
 import { routes } from "@/lib/routes";
 
-export function Testimonials() {
+type TestimonialsProps = {
+  reviews: ReviewItem[];
+};
+
+export function Testimonials({ reviews }: TestimonialsProps) {
   const t = useTranslations("reviews");
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const preview = reviews.slice(0, HOME_SECTION_PREVIEW);
   const hasMore = reviews.length > HOME_SECTION_PREVIEW;
 
@@ -58,7 +65,7 @@ export function Testimonials() {
         >
           {preview.map((r, i) => (
             <Reveal key={r.id} delay={i * 0.08}>
-              <ReviewCard review={r} />
+              <ReviewCard review={r} onOpen={() => setOpenIndex(i)} />
             </Reveal>
           ))}
         </div>
@@ -85,6 +92,13 @@ export function Testimonials() {
           </Button>
         </div>
       </Reveal>
+
+      <ReviewDetailModal
+        reviews={preview}
+        index={openIndex}
+        onClose={() => setOpenIndex(null)}
+        onIndexChange={setOpenIndex}
+      />
     </section>
   );
 }

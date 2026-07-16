@@ -10,22 +10,25 @@ import {
   ProjectModal,
   type ProjectItem,
 } from "@/components/sections/project-modal";
-import {
-  useLocalizedProjects,
-  useProjectCategoryFilters,
-} from "@/hooks/use-localized-projects";
+import { useProjectCategoryFilters } from "@/hooks/use-localized-projects";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import type { ProjectCategoryKey } from "@/data/projects";
+import type {
+  LocalizedProjectItem,
+  ProjectCategoryKey,
+} from "@/data/projects";
 
 type FilterKey = "all" | ProjectCategoryKey;
 
-export function ProjectsPage() {
+type ProjectsPageProps = {
+  projects: LocalizedProjectItem[];
+};
+
+export function ProjectsPage({ projects }: ProjectsPageProps) {
   const t = useTranslations("projects");
   const tCommon = useTranslations("common");
   const [active, setActive] = useState<ProjectItem | null>(null);
   const [filter, setFilter] = useState<FilterKey>("all");
-  const projects = useLocalizedProjects();
   const categories = useProjectCategoryFilters();
 
   const filtered = useMemo(
@@ -77,7 +80,11 @@ export function ProjectsPage() {
           <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-14 sm:grid-cols-2 lg:mt-16">
             {filtered.map((project, index) => (
               <Reveal key={project.id} delay={index * 0.06}>
-                <ProjectCard project={project} onOpen={setActive} priority={index === 0} />
+                <ProjectCard
+                  project={project}
+                  onOpen={setActive}
+                  priority={index === 0}
+                />
               </Reveal>
             ))}
           </div>

@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { getLocale } from "next-intl/server";
 import { HomeSection } from "@/components/sections/home";
 import { Services } from "@/components/sections/services";
 import { brand } from "@/lib/brand";
 import { createPageMetadata, routes } from "@/lib/routes";
+import { getPublishedReviews } from "@/lib/reviews/store";
+import { getSiteProjects } from "@/lib/projects/site";
+import { getPublicContactEmail } from "@/lib/social/store";
+import type { Locale } from "@/i18n/routing";
 
 const Projects = dynamic(
   () => import("@/components/sections/projects").then((m) => m.Projects)
@@ -24,15 +29,22 @@ export const metadata: Metadata = createPageMetadata({
   path: routes.home,
 });
 
-export default function Home() {
+export default async function Home() {
+  const locale = (await getLocale()) as Locale;
+  const [reviews, projects, contactEmail] = await Promise.all([
+    getPublishedReviews(),
+    getSiteProjects(locale),
+    getPublicContactEmail(),
+  ]);
+
   return (
     <>
       <HomeSection />
       <Services />
-      <Projects />
+      <Projects projects={projects} />
       <About />
-      <Testimonials />
-      <Contact />
+      <Testimonials reviews={reviews} />
+      <Contact contactEmail={contactEmail} />
     </>
   );
 }

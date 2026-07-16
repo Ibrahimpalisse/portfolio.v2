@@ -4,10 +4,13 @@ type FormAuditEvent =
   | "accepted"
   | "duplicate"
   | "rate_limited_email"
+  | "rate_limited_daily_ip"
+  | "rate_limited_daily_email"
   | "origin_rejected"
   | "turnstile_failed"
   | "validation_failed"
   | "send_failed"
+  | "persist_failed"
   | "sent";
 
 /** Logs structurés sans PII (IP hashée, pas d'email/nom/message). */

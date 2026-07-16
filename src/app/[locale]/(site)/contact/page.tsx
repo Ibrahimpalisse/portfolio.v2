@@ -4,6 +4,7 @@ import { Contact } from "@/components/sections/contact";
 import { PageBackBar } from "@/components/page-back-link";
 import { brand } from "@/lib/brand";
 import { createPageMetadata, routes } from "@/lib/routes";
+import { getPublicContactEmail } from "@/lib/social/store";
 import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = createPageMetadata({
@@ -14,12 +15,13 @@ export const metadata: Metadata = createPageMetadata({
 
 export default async function ContactPage() {
   const t = await getTranslations("common");
+  const contactEmail = await getPublicContactEmail();
 
   return (
     <>
       <ContactPageTrigger />
       <PageBackBar href={routes.home} label={t("backHome")} />
-      <Contact />
+      <Contact contactEmail={contactEmail} />
     </>
   );
 }

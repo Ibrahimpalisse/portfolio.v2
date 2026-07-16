@@ -18,7 +18,7 @@ export const REVIEW_LIMITS = {
 
 export type ReviewPayload = {
   name: string;
-  email?: string;
+  email: string;
   role?: string;
   rating: number;
   message: string;
@@ -59,16 +59,24 @@ export function parseReviewPayload(body: unknown): ReviewValidationResult {
     typeof raw.message === "string" ? raw.message : "",
     REVIEW_LIMITS.messageMax
   );
-  const email = trimOptionalEmail(raw.email, REVIEW_LIMITS.emailMax);
+  const emailRaw = trimOptionalEmail(raw.email, REVIEW_LIMITS.emailMax);
+  if (!emailRaw) {
+    return { ok: false, error: ValidationErrors.emailRequired, field: "email" };
+  }
+  if (!isValidEmail(emailRaw)) {
+    return { ok: false, error: ValidationErrors.emailInvalid, field: "email" };
+  }
+  const email = emailRaw;
   const roleRaw = trimOptionalText(raw.role, REVIEW_LIMITS.roleMax);
   const role = roleRaw
     ? sanitizePersonName(roleRaw, REVIEW_LIMITS.roleMax) || undefined
     : undefined;
 
-  const ratingNum = Number(raw.rating);
-  if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+  const ratingRaw = raw.rating;
+  if (typeof ratingRaw !== "number" || !Number.isInteger(ratingRaw) || ratingRaw < 1 || ratingRaw > 5) {
     return { ok: false, error: ValidationErrors.ratingInvalidRange, field: "rating" };
   }
+  const ratingNum = ratingRaw;
 
   if (name.length < REVIEW_LIMITS.nameMin) {
     return { ok: false, error: ValidationErrors.nameTooShort, field: "name" };
@@ -76,10 +84,6 @@ export function parseReviewPayload(body: unknown): ReviewValidationResult {
 
   if (message.length < REVIEW_LIMITS.messageMin) {
     return { ok: false, error: ValidationErrors.messageTooShortMin, field: "message" };
-  }
-
-  if (email && !isValidEmail(email)) {
-    return { ok: false, error: ValidationErrors.emailInvalid, field: "email" };
   }
 
   return {

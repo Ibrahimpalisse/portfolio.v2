@@ -8,6 +8,7 @@ import {
   ProjectCardPreview,
   type ProjectItem,
 } from "@/components/sections/project-modal";
+import { ProjectTypeBadges } from "@/components/sections/project-type-badges";
 
 type ProjectCardProps = {
   project: ProjectItem;
@@ -50,16 +51,10 @@ export function ProjectCard({
         <p className="mt-2 text-sm leading-relaxed text-foreground/55">
           {project.desc}
         </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {project.tags.map((t) => (
-            <span
-              key={t}
-              className="rounded-full border border-border bg-muted px-3 py-1 text-xs text-foreground/60"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
+        <ProjectTypeBadges
+          businessTypeIds={project.businessTypeIds}
+          tags={project.tags}
+        />
       </div>
     </>
   );

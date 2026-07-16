@@ -61,6 +61,11 @@ export function createPageMetadata({
       locale: "fr_FR",
       siteName: brand.name,
     },
+    twitter: {
+      card: "summary_large_image" as const,
+      title,
+      description,
+    },
     ...(index ? {} : { robots: { index: false, follow: false } }),
   };
 }

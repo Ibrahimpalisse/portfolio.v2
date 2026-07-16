@@ -14,11 +14,9 @@ export function createReviewFormSchema(t: ValidationTranslate) {
     email: z
       .string()
       .trim()
+      .min(1, t(ValidationErrors.emailRequired))
       .max(REVIEW_LIMITS.emailMax, t(ValidationErrors.emailTooLong))
-      .refine(
-        (value) => value === "" || z.string().email().safeParse(value).success,
-        t(ValidationErrors.emailInvalid)
-      ),
+      .email(t(ValidationErrors.emailInvalid)),
     role: z
       .string()
       .trim()

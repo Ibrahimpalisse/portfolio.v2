@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { brand } from "@/lib/brand";
 import { createPageMetadata, routes } from "@/lib/routes";
+import { getPublishedReviews } from "@/lib/reviews/store";
 
 const ReviewsPage = dynamic(
   () => import("@/components/sections/reviews-page").then((m) => m.ReviewsPage)
@@ -13,6 +14,7 @@ export const metadata: Metadata = createPageMetadata({
   path: routes.reviews,
 });
 
-export default function AvisRoute() {
-  return <ReviewsPage />;
+export default async function AvisRoute() {
+  const reviews = await getPublishedReviews();
+  return <ReviewsPage reviews={reviews} />;
 }

@@ -22,11 +22,7 @@ import {
 } from "@/components/turnstile-widget";
 import { useSubmitGuard } from "@/hooks/use-submit-guard";
 import { brand } from "@/lib/brand";
-import {
-  buildSafeMailtoUrl,
-  isHoneypotTriggered,
-  sanitizeForMailtoHeader,
-} from "@/lib/form-validation";
+import { isHoneypotTriggered } from "@/lib/form-validation";
 import { cn } from "@/lib/utils";
 import {
   createReviewFormSchema,
@@ -41,6 +37,7 @@ import {
   ValidationErrors,
   type ValidationErrorKey,
 } from "@/lib/validation-errors";
+import { showAppToast } from "@/lib/app-toast";
 
 const turnstileEnabled = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
 
@@ -120,39 +117,37 @@ function ReviewFormBody({ variant = "page" }: ReviewFormPageProps) {
         return;
       }
 
+      // Pas de fallback mailto (ouvre Outlook / dialogue Windows).
       if (res.status === 502 || res.status === 503) {
-        const { name, email, role, message, rating } = values;
-        const subject = sanitizeForMailtoHeader(
-          `Avis client — ${name} (${rating}/5)`,
-          200
-        );
-        const body = sanitizeForMailtoHeader(
-          `Note : ${"★".repeat(rating)}${"☆".repeat(5 - rating)} (${rating}/5)\n\n${message}\n\n— ${name}${role ? `\n${role}` : ""}${email ? `\n${email}` : ""}`,
-          1500
-        );
-        const mailto = buildSafeMailtoUrl(brand.email, subject, body);
-
-        if (mailto) {
-          window.location.href = mailto;
-          setSent(true);
-          return;
-        }
-
-        setSubmitError(tValidation("mailTooLong"));
+        const message = tValidation("sendFailed");
+        setSubmitError(message);
+        showAppToast(message, "error");
+        turnstileRef.current?.reset();
         return;
       }
 
       const resBody = (await res.json().catch(() => null)) as { error?: string } | null;
-      setSubmitError(
-        translateValidationError(
-          resBody?.error,
-          translateError,
-          res.status === 429 ? ValidationErrors.rateLimited : ValidationErrors.checkFields
-        )
+      const fallbackKey =
+        res.status === 429
+          ? ValidationErrors.reviewIpRateLimited
+          : res.status === 409
+            ? ValidationErrors.reviewAlreadySubmitted
+            : ValidationErrors.checkFields;
+      const message = translateValidationError(
+        resBody?.error,
+        translateError,
+        fallbackKey
+      );
+      setSubmitError(message);
+      showAppToast(
+        message,
+        res.status === 429 || res.status === 409 ? "info" : "error"
       );
       turnstileRef.current?.reset();
     } catch {
-      setSubmitError(tValidation("networkError"));
+      const message = tValidation("networkError");
+      setSubmitError(message);
+      showAppToast(message, "error");
       turnstileRef.current?.reset();
     } finally {
       setLoading(false);

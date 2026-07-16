@@ -9,6 +9,7 @@ import {
   type ProjectCategoryKey,
 } from "@/data/projects";
 
+/** Fallback client-only (démo). Préférer getSiteProjects côté serveur. */
 export function useLocalizedProjects(): LocalizedProjectItem[] {
   const t = useTranslations("projects");
 
@@ -20,7 +21,8 @@ export function useLocalizedProjects(): LocalizedProjectItem[] {
         title: t(`items.${project.id}.title`),
         category: t(`categories.${project.categoryKey}`),
         desc: t(`items.${project.id}.desc`),
-        tags: project.tags,
+        tags: [],
+        businessTypeIds: project.businessTypeIds,
         images: project.images.map((image) => ({
           src: image.src,
           label: t(`items.${project.id}.images.${image.labelKey}`),

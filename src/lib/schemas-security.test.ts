@@ -56,29 +56,95 @@ describe("OWASP — parseContactPayload", () => {
     assert.equal(result.ok, false);
     if (!result.ok) assert.equal(result.error, ValidationErrors.messageTooShortMin);
   });
+
+  it("neutralise XSS / CRLF dans le nom", () => {
+    const result = parseContactPayload({
+      name: "<script>\r\nJean",
+      email: "jean@example.com",
+      message: "Bonjour, je souhaite un devis pour mon site.",
+      _honeypot: "",
+    });
+    assert.equal(result.ok, true);
+    if (result.ok) {
+      assert.equal(result.data.name.includes("<"), false);
+      assert.equal(result.data.name.includes("\r"), false);
+    }
+  });
+
+  it("rejette email invalide", () => {
+    const result = parseContactPayload({
+      name: "Jean",
+      email: "pas-email",
+      message: "Message assez long pour validation contact.",
+      _honeypot: "",
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.equal(result.error, ValidationErrors.emailInvalid);
+  });
 });
 
 describe("OWASP — parseReviewPayload", () => {
-  it("accepte un avis valide", () => {
+  it("accepte un avis valide avec email obligatoire", () => {
+    const result = parseReviewPayload({
+      name: "Marie",
+      email: "marie@example.com",
+      rating: 5,
+      message: "Excellent travail, très professionnel.",
+      _honeypot: "",
+    });
+    assert.equal(result.ok, true);
+    if (result.ok) assert.equal(result.data.email, "marie@example.com");
+  });
+
+  it("rejette un avis sans email", () => {
     const result = parseReviewPayload({
       name: "Marie",
       rating: 5,
       message: "Excellent travail, très professionnel.",
       _honeypot: "",
     });
-    assert.equal(result.ok, true);
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.equal(result.error, ValidationErrors.emailRequired);
   });
 
   it("rejette une note hors plage", () => {
     for (const rating of [0, 6, 3.5, NaN]) {
       const result = parseReviewPayload({
         name: "Marie",
+        email: "marie@example.com",
         rating,
         message: "Message valide assez long.",
         _honeypot: "",
       });
       assert.equal(result.ok, false);
     }
+  });
+
+  it("neutralise XSS / CRLF dans le nom", () => {
+    const result = parseReviewPayload({
+      name: "<script>\r\nMarie",
+      email: "marie@example.com",
+      rating: 5,
+      message: "Excellent travail, très professionnel.",
+      _honeypot: "",
+    });
+    assert.equal(result.ok, true);
+    if (result.ok) {
+      assert.equal(result.data.name.includes("<"), false);
+      assert.equal(result.data.name.includes("\r"), false);
+    }
+  });
+
+  it("honeypot → honeypot sans fuite métier", () => {
+    const result = parseReviewPayload({
+      name: "Marie",
+      email: "marie@example.com",
+      rating: 5,
+      message: "Excellent travail, très professionnel.",
+      _honeypot: "bot",
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.equal(result.error, "honeypot");
   });
 
   it("isSafeHttpUrl n'autorise que http(s)", () => {

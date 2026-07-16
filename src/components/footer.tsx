@@ -7,12 +7,14 @@ import {
 } from "react-icons/si";
 import { getTranslations } from "next-intl/server";
 import { BrandLogoFooter } from "@/components/brand-logo";
+import { ContactOpenLink } from "@/components/contact-open-link";
 import { FooterContactButton } from "@/components/footer-contact-button";
 import { FooterContactLink } from "@/components/footer-contact-link";
 import { FooterLeaveReviewLink } from "@/components/footer-leave-review-link";
 import { Link } from "@/i18n/navigation";
 import { brand, getFooterSocials, type FooterSocialId } from "@/lib/brand";
-import { homeAnchors, routes } from "@/lib/routes";
+import { getPublicContactEmail } from "@/lib/social/store";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 const socialIcons: Record<
@@ -43,13 +45,14 @@ export async function Footer() {
   const t = await getTranslations("footer");
   const tNav = await getTranslations("nav");
   const tMeta = await getTranslations("meta");
-  const socials = getFooterSocials();
+  const socials = await getFooterSocials();
+  const contactEmail = await getPublicContactEmail();
   const year = new Date().getFullYear();
 
   const navLinks = [
-    { label: tNav("services"), href: `${routes.home}${homeAnchors.services}` },
+    { label: tNav("services"), href: routes.services },
     { label: tNav("projects"), href: routes.projects },
-    { label: tNav("about"), href: `${routes.home}${homeAnchors.about}` },
+    { label: tNav("about"), href: routes.about },
     { label: tNav("reviews"), href: routes.reviews },
   ];
 
@@ -89,64 +92,49 @@ export async function Footer() {
           <div className="lg:col-span-4">
             <FooterColumnTitle>{t("contact")}</FooterColumnTitle>
             <div className="mt-4 space-y-4">
-              <p className="text-sm text-foreground/60">{t("preferredContact")}</p>
-              <a
-                href={`mailto:${brand.email}`}
+              {socials.find((s) => s.id === "discord")?.href ? (
+                <p className="text-sm text-foreground/60">{t("preferredContact")}</p>
+              ) : null}
+              <ContactOpenLink
                 className={cn(
                   footerLinkClass,
                   "inline-flex items-center gap-2 no-underline hover:underline"
                 )}
               >
                 <Mail className="h-4 w-4 shrink-0 text-step-accent" aria-hidden />
-                {brand.email}
-              </a>
+                {contactEmail}
+              </ContactOpenLink>
 
-              <div>
-                <p className="mb-3 text-xs text-foreground/45">{t("networks")}</p>
-                <div className="flex flex-wrap gap-2">
-                  {socials.map((s) => {
-                    const Icon = socialIcons[s.id];
-                    const active = s.href.length > 0;
-
-                    const className = cn(
-                      iconButtonClass,
-                      active &&
-                        "hover:border-step-accent/50 hover:bg-step-accent/10 hover:text-step-accent",
-                      s.preferred &&
-                        active &&
-                        "border-step-accent/35 bg-step-accent/10 text-step-accent",
-                      !active && "cursor-not-allowed opacity-35"
-                    );
-
-                    if (!active) {
-                      return (
-                        <span
-                          key={s.id}
-                          aria-label={t("socialSoon", { label: s.label })}
-                          title={t("socialConfig", { label: s.label })}
-                          className={className}
-                        >
-                          <Icon className="h-[18px] w-[18px]" />
-                        </span>
-                      );
-                    }
-
-                    return (
-                      <a
-                        key={s.id}
-                        href={s.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={s.label}
-                        title={s.label}
-                        className={className}
-                      >
-                        <Icon className="h-[18px] w-[18px]" />
-                      </a>
-                    );
-                  })}
+              {socials.some((s) => s.href.length > 0) ? (
+                <div>
+                  <p className="mb-3 text-xs text-foreground/45">{t("networks")}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {socials
+                      .filter((s) => s.href.length > 0)
+                      .map((s) => {
+                        const Icon = socialIcons[s.id];
+                        return (
+                          <a
+                            key={s.id}
+                            href={s.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={s.label}
+                            title={s.label}
+                            className={cn(
+                              iconButtonClass,
+                              "hover:border-step-accent/50 hover:bg-step-accent/10 hover:text-step-accent",
+                              s.preferred &&
+                                "border-step-accent/35 bg-step-accent/10 text-step-accent"
+                            )}
+                          >
+                            <Icon className="h-[18px] w-[18px]" />
+                          </a>
+                        );
+                      })}
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </div>

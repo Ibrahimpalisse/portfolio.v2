@@ -11,7 +11,7 @@ import { ContactOpenLink } from "@/components/contact-open-link";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { openLeaveReviewModal } from "@/lib/open-leave-review-modal";
-import { homeAnchors, routes } from "@/lib/routes";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 function NavLink({
@@ -50,9 +50,9 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { label: t("services"), href: `${routes.home}${homeAnchors.services}` },
+    { label: t("services"), href: routes.services },
     { label: t("projects"), href: routes.projects },
-    { label: t("about"), href: `${routes.home}${homeAnchors.about}` },
+    { label: t("about"), href: routes.about },
     { label: t("reviews"), href: routes.reviews },
     { label: t("leaveReview"), href: "#", openReview: true },
   ] as const;
@@ -70,7 +70,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:px-4 sm:pt-4 md:pt-8">
+    <header className="fixed left-0 right-[var(--scrollbar-compensation,0px)] top-0 z-50 flex justify-center px-3 pt-3 sm:px-4 sm:pt-4 md:pt-8">
       <div className="relative w-full max-w-5xl">
         <motion.nav
           initial={{ y: -40, opacity: 0 }}

@@ -1,41 +1,69 @@
 import {
-  clearHomeScrollRestoreFlag,
   markHomeForScrollRestore,
   restoreScrollPosition,
   saveScrollPosition,
-  scrollStorageKey,
-  shouldRestoreHomeScroll,
 } from "@/lib/scroll-position";
-import { routes } from "@/lib/routes";
 
-/** Bloque le scroll de la page sans perdre la position (modales). */
+const SCROLL_LOCK_ATTR = "data-scroll-locked";
+
+/**
+ * Bloque le scroll sans trou latéral (barre / scrollbar-gutter).
+ * Compense via --scrollbar-compensation (html + headers fixed).
+ */
 export function lockBodyScroll(): () => void {
+  const html = document.documentElement;
+  const { body } = document;
+
+  const lockCount = Number(html.dataset.scrollLockCount ?? "0");
+  html.dataset.scrollLockCount = String(lockCount + 1);
+  if (lockCount > 0) {
+    return () => {
+      const next = Math.max(0, Number(html.dataset.scrollLockCount ?? "1") - 1);
+      html.dataset.scrollLockCount = String(next);
+      if (next === 0) unlockScrollStyles();
+    };
+  }
+
   const scrollY = window.scrollY;
-  const scrollbarWidth =
-    window.innerWidth - document.documentElement.clientWidth;
+  const scrollbarWidth = Math.max(0, window.innerWidth - html.clientWidth);
 
   saveScrollPosition(window.location.pathname, scrollY);
 
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollY}px`;
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
+  html.setAttribute(SCROLL_LOCK_ATTR, "true");
+  html.style.setProperty("--scrollbar-compensation", `${scrollbarWidth}px`);
 
-  if (scrollbarWidth > 0) {
-    document.body.style.paddingRight = `${scrollbarWidth}px`;
-  }
+  body.style.position = "fixed";
+  body.style.top = `-${scrollY}px`;
+  body.style.left = "0";
+  body.style.right = "0";
+  body.style.width = "100%";
+  body.style.overflow = "hidden";
 
   return () => {
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.left = "";
-    document.body.style.right = "";
-    document.body.style.width = "";
-    document.body.style.paddingRight = "";
+    const next = Math.max(0, Number(html.dataset.scrollLockCount ?? "1") - 1);
+    html.dataset.scrollLockCount = String(next);
+    if (next > 0) return;
+
+    unlockScrollStyles();
     restoreScrollPosition(scrollY);
     saveScrollPosition(window.location.pathname, scrollY);
   };
+}
+
+function unlockScrollStyles() {
+  const html = document.documentElement;
+  const { body } = document;
+
+  html.removeAttribute(SCROLL_LOCK_ATTR);
+  html.style.removeProperty("--scrollbar-compensation");
+  delete html.dataset.scrollLockCount;
+
+  body.style.position = "";
+  body.style.top = "";
+  body.style.left = "";
+  body.style.right = "";
+  body.style.width = "";
+  body.style.overflow = "";
 }
 
 export { markHomeForScrollRestore };

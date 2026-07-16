@@ -13,14 +13,17 @@ import {
   type ProjectItem,
 } from "@/components/sections/project-modal";
 import { Link } from "@/i18n/navigation";
-import { useLocalizedProjects } from "@/hooks/use-localized-projects";
+import type { LocalizedProjectItem } from "@/data/projects";
 import { getHomeGridClass, HOME_SECTION_PREVIEW } from "@/lib/home-layout";
 import { markHomeForScrollRestore } from "@/lib/lock-body-scroll";
 import { routes } from "@/lib/routes";
 
-export function Projects() {
+type ProjectsProps = {
+  projects: LocalizedProjectItem[];
+};
+
+export function Projects({ projects }: ProjectsProps) {
   const t = useTranslations("projects");
-  const projects = useLocalizedProjects();
   const [active, setActive] = useState<ProjectItem | null>(null);
 
   const preview = projects.slice(0, HOME_SECTION_PREVIEW);

@@ -64,7 +64,7 @@ export function BrowserPreview3D({
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        className="relative mx-auto w-full max-w-full sm:max-w-3xl lg:max-w-4xl"
+        className="relative mx-auto w-full max-w-md sm:max-w-lg md:max-w-xl"
       >
         <div
           className="overflow-hidden rounded-lg border border-border bg-card shadow-[0_20px_40px_-20px_rgba(0,0,0,0.35)] sm:rounded-xl sm:shadow-[0_40px_80px_-24px_rgba(0,0,0,0.35)]"
@@ -82,7 +82,7 @@ export function BrowserPreview3D({
               alt={`Aperçu du site ${title}`}
               fill
               className="object-cover object-top"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 900px"
+              sizes="(max-width: 640px) 90vw, (max-width: 768px) 512px, 576px"
               priority
             />
           </div>

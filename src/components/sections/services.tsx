@@ -22,8 +22,9 @@ const serviceIcons = {
   maintenance: Rocket,
 } as const;
 
-export function Services() {
+export function Services({ variant = "section" }: { variant?: "section" | "page" } = {}) {
   const t = useTranslations("services");
+  const HeadingTag = variant === "page" ? "h1" : "h2";
 
   return (
     <section
@@ -38,10 +39,10 @@ export function Services() {
             </span>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-4 font-display-serif text-3xl font-semibold tracking-tight sm:mt-5 sm:text-4xl md:text-5xl">
+            <HeadingTag className="mt-4 font-display-serif text-3xl font-semibold tracking-tight sm:mt-5 sm:text-4xl md:text-5xl">
               {t("title")}{" "}
               <span className="text-gradient">{t("titleHighlight")}</span>
-            </h2>
+            </HeadingTag>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-4 text-base leading-relaxed text-foreground/60 sm:mt-5 sm:text-lg">

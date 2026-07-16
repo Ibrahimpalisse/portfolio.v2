@@ -143,6 +143,12 @@ describe("openLeaveReviewModal (parity contact system)", () => {
     assert.equal(received, OPEN_LEAVE_REVIEW_EVENT);
     assert.equal(prevented, true);
     assert.equal(OPEN_REVIEW_QUERY, "openReview");
+    assert.equal(OPEN_LEAVE_REVIEW_EVENT, "open-leave-review-modal");
+  });
+
+  it("ne plante pas sans événement", () => {
+    assert.doesNotThrow(() => openLeaveReviewModal());
+    assert.doesNotThrow(() => openLeaveReviewModal({}));
   });
 });
 

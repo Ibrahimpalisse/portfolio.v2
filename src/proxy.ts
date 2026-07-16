@@ -6,9 +6,15 @@ import {
   getClientIp,
   pruneRateLimitStore,
 } from "@/lib/rate-limit-core";
-import { ADMIN_LOGIN_LIMITS } from "@/lib/admin/constants";
+import {
+  ADMIN_LOGIN_LIMITS,
+  ADMIN_MFA_LIMITS,
+  ADMIN_PASSWORD_CHANGE_LIMITS,
+} from "@/lib/admin/constants";
+import { ADMIN_ERROR_CODES, ADMIN_ERROR_MESSAGES } from "@/lib/admin/error-codes";
 import { handleAdminSession } from "@/lib/supabase/proxy-session";
 import { routing } from "@/i18n/routing";
+import { redirectLegacyLocalePrefix } from "@/lib/i18n/legacy-locale-redirect";
 
 const handleI18nRouting = createIntlMiddleware(routing);
 
@@ -19,6 +25,8 @@ type RateLimitEntry = {
 
 const formStore = new Map<string, RateLimitEntry>();
 const loginStore = new Map<string, RateLimitEntry>();
+const passwordStore = new Map<string, RateLimitEntry>();
+const mfaStore = new Map<string, RateLimitEntry>();
 
 function formRateLimitResponse(retryAfterSec?: number) {
   return NextResponse.json(
@@ -33,9 +41,12 @@ function formRateLimitResponse(retryAfterSec?: number) {
   );
 }
 
-function loginRateLimitResponse(retryAfterSec?: number) {
+function adminRateLimitProxyResponse(retryAfterSec?: number) {
   return NextResponse.json(
-    { error: "Trop de tentatives de connexion. Réessayez plus tard." },
+    {
+      code: ADMIN_ERROR_CODES.RATE_LIMITED,
+      error: ADMIN_ERROR_MESSAGES.rate_limited,
+    },
     {
       status: 429,
       headers: {
@@ -85,7 +96,53 @@ function handleAdminLoginRateLimit(request: NextRequest) {
   );
 
   if (!rate.allowed) {
-    return loginRateLimitResponse(rate.retryAfterSec);
+    return adminRateLimitProxyResponse(rate.retryAfterSec);
+  }
+
+  return NextResponse.next();
+}
+
+function handleAdminPasswordRateLimit(request: NextRequest) {
+  if (request.method !== "POST") {
+    return NextResponse.next();
+  }
+
+  pruneRateLimitStore(passwordStore);
+
+  const ip = getClientIp(request);
+  const rate = checkRateLimitInStore(
+    passwordStore,
+    `admin-password:${ip}`,
+    Date.now(),
+    ADMIN_PASSWORD_CHANGE_LIMITS.windowMs,
+    ADMIN_PASSWORD_CHANGE_LIMITS.maxAttempts
+  );
+
+  if (!rate.allowed) {
+    return adminRateLimitProxyResponse(rate.retryAfterSec);
+  }
+
+  return NextResponse.next();
+}
+
+function handleAdminMfaRateLimit(request: NextRequest) {
+  if (request.method !== "POST") {
+    return NextResponse.next();
+  }
+
+  pruneRateLimitStore(mfaStore);
+
+  const ip = getClientIp(request);
+  const rate = checkRateLimitInStore(
+    mfaStore,
+    `admin-mfa:${ip}`,
+    Date.now(),
+    ADMIN_MFA_LIMITS.windowMs,
+    ADMIN_MFA_LIMITS.maxAttempts
+  );
+
+  if (!rate.allowed) {
+    return adminRateLimitProxyResponse(rate.retryAfterSec);
   }
 
   return NextResponse.next();
@@ -98,8 +155,22 @@ export async function proxy(request: NextRequest) {
     return handleFormRateLimit(request);
   }
 
-  if (path === "/api/admin/login" || path === "/api/admin/mfa/verify") {
+  if (path === "/api/admin/password") {
+    const rateResponse = handleAdminPasswordRateLimit(request);
+    if (rateResponse.status === 429) return rateResponse;
+  }
+
+  if (
+    path === "/api/admin/login" ||
+    path === "/api/admin/mfa/verify" ||
+    path === "/api/admin/mfa/enroll/verify"
+  ) {
     const rateResponse = handleAdminLoginRateLimit(request);
+    if (rateResponse.status === 429) return rateResponse;
+  }
+
+  if (path === "/api/admin/mfa/challenge" || path === "/api/admin/mfa/enroll") {
+    const rateResponse = handleAdminMfaRateLimit(request);
     if (rateResponse.status === 429) return rateResponse;
   }
 
@@ -113,6 +184,8 @@ export async function proxy(request: NextRequest) {
     !path.startsWith("/_next") &&
     !path.includes(".")
   ) {
+    const legacy = redirectLegacyLocalePrefix(request);
+    if (legacy) return legacy;
     return handleI18nRouting(request);
   }
 
@@ -124,8 +197,11 @@ export const config = {
     "/api/contact",
     "/api/review",
     "/api/admin/login",
+    "/api/admin/password",
     "/api/admin/mfa/verify",
     "/api/admin/mfa/challenge",
+    "/api/admin/mfa/enroll",
+    "/api/admin/mfa/enroll/verify",
     "/admin/:path*",
     "/((?!api|_next|_vercel|.*\\..*).*)",
   ],

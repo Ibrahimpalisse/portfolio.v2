@@ -1,21 +1,21 @@
 import type { ProjectItem } from "@/components/sections/project-modal";
 
-export type ProjectCategoryKey = "personal";
+export type ProjectCategoryKey = "personal" | "sold";
 
 export type ProjectCatalogItem = {
   id: string;
   categoryKey: ProjectCategoryKey;
-  tags: string[];
+  businessTypeIds: string[];
   images: { src: string; labelKey: string }[];
   link?: string;
 };
 
-/** Structure des projets — textes dans messages/projects.items.* */
+/** Structure des projets démo — textes dans messages/projects.items.* */
 export const projectCatalog: ProjectCatalogItem[] = [
   {
     id: "nova",
     categoryKey: "personal",
-    tags: ["Next.js", "Dashboard", "TypeScript"],
+    businessTypeIds: ["dashboard", "webapp"],
     images: [
       { src: "/projects/nova.svg", labelKey: "home" },
       { src: "/projects/nova-dashboard.svg", labelKey: "dashboard" },
@@ -25,7 +25,7 @@ export const projectCatalog: ProjectCatalogItem[] = [
   {
     id: "maison-belle",
     categoryKey: "personal",
-    tags: ["E-commerce", "UI/UX", "Responsive"],
+    businessTypeIds: ["ecommerce"],
     images: [
       { src: "/projects/maison-belle.svg", labelKey: "shop" },
       { src: "/projects/maison-belle-product.svg", labelKey: "product" },
@@ -34,7 +34,7 @@ export const projectCatalog: ProjectCatalogItem[] = [
   {
     id: "atelier-lumiere",
     categoryKey: "personal",
-    tags: ["Vitrine", "Galerie", "Design"],
+    businessTypeIds: ["showcase"],
     images: [
       { src: "/projects/atelier-lumiere.svg", labelKey: "home" },
       { src: "/projects/atelier-lumiere-gallery.svg", labelKey: "gallery" },
@@ -43,7 +43,7 @@ export const projectCatalog: ProjectCatalogItem[] = [
   {
     id: "fitpro",
     categoryKey: "personal",
-    tags: ["App web", "Landing", "Mobile-first"],
+    businessTypeIds: ["landing", "booking", "webapp"],
     images: [
       { src: "/projects/fitpro.svg", labelKey: "landing" },
       { src: "/projects/fitpro-app.svg", labelKey: "member" },
@@ -56,17 +56,21 @@ export type LocalizedProjectItem = ProjectItem & {
 };
 
 export function getProjectCategoryKeys(): ProjectCategoryKey[] {
-  return [...new Set(projectCatalog.map((project) => project.categoryKey))];
+  return ["personal", "sold"];
 }
 
-/** @deprecated Utiliser useLocalizedProjects() côté client. */
+/** @deprecated Utiliser useLocalizedProjects() / getSiteProjects(). */
 export const projects: ProjectItem[] = projectCatalog.map((project) => ({
   id: project.id,
   title: project.id,
   category: project.categoryKey,
   desc: "",
-  tags: project.tags,
-  images: project.images.map((image) => ({ src: image.src, label: image.labelKey })),
+  tags: [],
+  businessTypeIds: project.businessTypeIds,
+  images: project.images.map((image) => ({
+    src: image.src,
+    label: image.labelKey,
+  })),
   link: project.link,
 }));
 

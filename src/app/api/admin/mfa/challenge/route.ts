@@ -1,5 +1,10 @@
 import { isAllowedAdminEmail, isAdminConfigured } from "@/lib/admin/allowlist";
 import { logAdminAuthEvent } from "@/lib/admin/audit-log";
+import { ADMIN_ERROR_CODES } from "@/lib/admin/error-codes";
+import {
+  adminErrorResponse,
+  adminMethodNotAllowed,
+} from "@/lib/admin/error-response";
 import { adminMfaRequired, startAdminMfaChallenge } from "@/lib/admin/mfa";
 import { jsonResponse } from "@/lib/api/json-response";
 import { getClientIp } from "@/lib/rate-limit-core";
@@ -11,11 +16,11 @@ export async function POST(request: Request) {
   const ip = getClientIp(request);
 
   if (!isSupabaseConfigured() || !isAdminConfigured()) {
-    return jsonResponse({ error: "Service temporairement indisponible." }, 503);
+    return adminErrorResponse(ADMIN_ERROR_CODES.UNAVAILABLE, 503);
   }
 
   if (!verifyFormRequestOrigin(request)) {
-    return jsonResponse({ error: "Requête non autorisée." }, 403);
+    return adminErrorResponse(ADMIN_ERROR_CODES.UNAUTHORIZED_ORIGIN, 403);
   }
 
   try {
@@ -25,24 +30,18 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser();
 
     if (!user || !isAllowedAdminEmail(user.email)) {
-      return jsonResponse({ error: "Session expirée. Reconnectez-vous." }, 401);
+      return adminErrorResponse(ADMIN_ERROR_CODES.SESSION_EXPIRED, 401);
     }
 
     const needsMfa = await adminMfaRequired(supabase);
     if (!needsMfa) {
-      return jsonResponse({ error: "Vérification déjà effectuée." }, 400);
+      return adminErrorResponse(ADMIN_ERROR_CODES.MFA_ALREADY_DONE, 400);
     }
 
     const challenge = await startAdminMfaChallenge(supabase);
     if (!challenge.ok) {
       logAdminAuthEvent("mfa_failed", ip, { reason: challenge.error });
-      return jsonResponse(
-        {
-          error:
-            "Authentification TOTP non configurée. Activez-la dans Supabase (Authentication → MFA).",
-        },
-        403
-      );
+      return adminErrorResponse(ADMIN_ERROR_CODES.MFA_NOT_CONFIGURED, 403);
     }
 
     logAdminAuthEvent("mfa_challenge", ip);
@@ -55,10 +54,10 @@ export async function POST(request: Request) {
       200
     );
   } catch {
-    return jsonResponse({ error: "Impossible de préparer la vérification." }, 502);
+    return adminErrorResponse(ADMIN_ERROR_CODES.INTERNAL, 502);
   }
 }
 
 export function GET() {
-  return jsonResponse({ error: "Method not allowed" }, 405);
+  return adminMethodNotAllowed();
 }

@@ -19,28 +19,28 @@ import {
   type TurnstileWidgetHandle,
 } from "@/components/turnstile-widget";
 import { useSubmitGuard } from "@/hooks/use-submit-guard";
-import { brand } from "@/lib/brand";
 import { CONTACT_LIMITS } from "@/lib/contact-schema";
 import {
   contactFormDefaultValues,
   createContactFormSchema,
   type ContactFormValues,
 } from "@/lib/contact-form-schema";
-import {
-  buildSafeMailtoUrl,
-  isHoneypotTriggered,
-  sanitizeForMailtoHeader,
-} from "@/lib/form-validation";
+import { isHoneypotTriggered } from "@/lib/form-validation";
 import { CONTACT_MODAL_TITLE_ID } from "@/lib/modal-a11y-ids";
 import {
   translateValidationError,
   ValidationErrors,
   type ValidationErrorKey,
 } from "@/lib/validation-errors";
+import { showAppToast } from "@/lib/app-toast";
 
 const turnstileEnabled = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
 
-export function ContactForm() {
+type ContactFormProps = {
+  contactEmail: string;
+};
+
+export function ContactForm({ contactEmail }: ContactFormProps) {
   const t = useTranslations("contact");
   const tValidation = useTranslations("validation");
   const translateError = (key: ValidationErrorKey) => tValidation(key);
@@ -107,38 +107,33 @@ export function ContactForm() {
         return;
       }
 
+      // Pas de fallback mailto (ouvre Outlook / dialogue Windows) —
+      // erreur générale via toast.
       if (res.status === 502 || res.status === 503) {
-        const subject = sanitizeForMailtoHeader(
-          `Demande de projet — ${values.name}`,
-          200
-        );
-        const body = sanitizeForMailtoHeader(
-          `${values.message}\n\n— ${values.name}\n${values.email}`,
-          1500
-        );
-        const mailto = buildSafeMailtoUrl(brand.email, subject, body);
-
-        if (mailto) {
-          window.location.href = mailto;
-          setSent(true);
-          return;
-        }
-
-        setSubmitError(tValidation("mailTooLong"));
+        const message = tValidation("sendFailed");
+        setSubmitError(message);
+        showAppToast(message, "error");
+        turnstileRef.current?.reset();
+        setTurnstileToken("");
         return;
       }
 
       const resBody = (await res.json().catch(() => null)) as { error?: string } | null;
-      setSubmitError(
-        translateValidationError(
-          resBody?.error,
-          translateError,
-          res.status === 429 ? ValidationErrors.rateLimited : ValidationErrors.checkFields
-        )
+      const message = translateValidationError(
+        resBody?.error,
+        translateError,
+        res.status === 429
+          ? ValidationErrors.rateLimited
+          : ValidationErrors.checkFields
       );
+      setSubmitError(message);
+      showAppToast(message, res.status === 429 ? "info" : "error");
       turnstileRef.current?.reset();
+      setTurnstileToken("");
     } catch {
-      setSubmitError(tValidation("networkError"));
+      const message = tValidation("networkError");
+      setSubmitError(message);
+      showAppToast(message, "error");
       turnstileRef.current?.reset();
     } finally {
       setLoading(false);
@@ -261,18 +256,17 @@ export function ContactForm() {
 
       <p className="mt-6 text-center text-xs text-foreground/50 break-all sm:text-sm sm:break-normal">
         {t("orEmail")}{" "}
-        <a
-          href={`mailto:${brand.email}`}
-          className="text-primary hover:underline"
-        >
-          {brand.email}
-        </a>
+        <span className="font-medium text-primary">{contactEmail}</span>
       </p>
     </>
   );
 }
 
-export function Contact() {
+type ContactProps = {
+  contactEmail: string;
+};
+
+export function Contact({ contactEmail }: ContactProps) {
   const t = useTranslations("contact");
 
   return (
@@ -304,12 +298,7 @@ export function Contact() {
 
           <p className="mt-6 text-xs text-foreground/50 break-all sm:text-sm sm:break-normal">
             {t("orEmail")}{" "}
-            <a
-              href={`mailto:${brand.email}`}
-              className="text-primary hover:underline"
-            >
-              {brand.email}
-            </a>
+            <span className="font-medium text-primary">{contactEmail}</span>
           </p>
         </div>
       </Reveal>

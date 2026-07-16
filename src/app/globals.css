@@ -81,6 +81,13 @@ html {
   overflow-x: clip;
 }
 
+/* Pendant une modale : plus de bande réservée / barre de scroll */
+html[data-scroll-locked] {
+  overflow: hidden;
+  scrollbar-gutter: auto;
+  padding-inline-end: var(--scrollbar-compensation, 0px);
+}
+
 /* Scrollbar — teinte beige */
 html,
 .custom-scrollbar {

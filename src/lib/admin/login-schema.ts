@@ -13,6 +13,7 @@ export const adminLoginSchema = z.object({
     .min(ADMIN_LOGIN_LIMITS.minPasswordLength, "Mot de passe trop court.")
     .max(ADMIN_LOGIN_LIMITS.maxPasswordLength, "Mot de passe trop long."),
   _honeypot: z.string().optional(),
+  turnstileToken: z.string().max(2048).optional(),
 });
 
 export type AdminLoginValues = z.infer<typeof adminLoginSchema>;
@@ -21,9 +22,14 @@ export const adminLoginDefaultValues: AdminLoginValues = {
   email: "",
   password: "",
   _honeypot: "",
+  turnstileToken: "",
 };
 
-export type AdminLoginPayload = Pick<AdminLoginValues, "email" | "password">;
+export type AdminLoginPayload = {
+  email: string;
+  password: string;
+  turnstileToken: string;
+};
 
 export function parseAdminLoginBody(body: unknown):
   | { ok: true; data: AdminLoginPayload }
@@ -47,6 +53,7 @@ export function parseAdminLoginBody(body: unknown):
     data: {
       email: parsed.data.email.trim().toLowerCase(),
       password: parsed.data.password,
+      turnstileToken: parsed.data.turnstileToken?.trim() ?? "",
     },
   };
 }

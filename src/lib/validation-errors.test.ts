@@ -9,6 +9,14 @@ import {
 describe("validation-errors", () => {
   it("isValidationErrorKey reconnaît les clés connues", () => {
     assert.equal(isValidationErrorKey(ValidationErrors.rateLimited), true);
+    assert.equal(
+      isValidationErrorKey(ValidationErrors.reviewAlreadySubmitted),
+      true
+    );
+    assert.equal(
+      isValidationErrorKey(ValidationErrors.reviewIpRateLimited),
+      true
+    );
     assert.equal(isValidationErrorKey("unknownKey"), false);
     assert.equal(isValidationErrorKey(""), false);
   });

@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAllowedAdminEmail, isAdminConfigured } from "@/lib/admin/allowlist";
 import { ADMIN_ROUTES } from "@/lib/admin/constants";
-import { hasAdminMfaSatisfied } from "@/lib/admin/mfa";
+import { adminHasVerifiedTotp, hasAdminMfaSatisfied } from "@/lib/admin/mfa";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 
 export type AdminSessionResult = {
@@ -43,6 +43,11 @@ export async function handleAdminSession(request: NextRequest): Promise<AdminSes
     },
   });
 
+  // Auth-js proxy : ne pas logger session.user lu depuis les cookies.
+  (
+    supabase.auth as unknown as { suppressGetSessionWarning: boolean }
+  ).suppressGetSessionWarning = true;
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -59,7 +64,7 @@ export async function handleAdminSession(request: NextRequest): Promise<AdminSes
 
   if (isLoginRoute) {
     if (user && isAdmin) {
-      const mfaOk = await hasAdminMfaSatisfied(supabase);
+      const mfaOk = await hasAdminMfaSatisfied(supabase, user);
       if (mfaOk) {
         const url = request.nextUrl.clone();
         url.pathname = ADMIN_ROUTES.home;
@@ -71,7 +76,7 @@ export async function handleAdminSession(request: NextRequest): Promise<AdminSes
     }
 
     if (user && !isAdmin) {
-      await supabase.auth.signOut();
+      await supabase.auth.signOut({ scope: "local" });
     }
 
     return { response, user: null };
@@ -85,18 +90,19 @@ export async function handleAdminSession(request: NextRequest): Promise<AdminSes
   }
 
   if (!isAdmin) {
-    await supabase.auth.signOut();
+    await supabase.auth.signOut({ scope: "local" });
     const url = request.nextUrl.clone();
     url.pathname = ADMIN_ROUTES.login;
     url.searchParams.set("error", "unauthorized");
     return { response: NextResponse.redirect(url), user: null };
   }
 
-  const mfaOk = await hasAdminMfaSatisfied(supabase);
+  const mfaOk = await hasAdminMfaSatisfied(supabase, user);
   if (!mfaOk) {
     const url = request.nextUrl.clone();
     url.pathname = ADMIN_ROUTES.login;
-    url.searchParams.set("step", "mfa");
+    const hasTotp = await adminHasVerifiedTotp(supabase);
+    url.searchParams.set("step", hasTotp ? "mfa" : "enroll");
     return { response: NextResponse.redirect(url), user };
   }
 

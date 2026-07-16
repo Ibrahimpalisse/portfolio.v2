@@ -1,16 +1,23 @@
-import { brand } from "@/lib/brand";
 import { absoluteUrl, routes } from "@/lib/routes";
+import { brand } from "@/lib/brand";
+import { getSiteSettings } from "@/lib/social/store";
 
-export function PersonJsonLd() {
+export async function PersonJsonLd() {
+  const settings = await getSiteSettings();
   const schema = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: brand.name,
     url: absoluteUrl(routes.home),
-    email: brand.email,
+    email: settings.contactEmail,
     jobTitle: "Développeur web freelance",
     description: brand.description,
-    sameAs: Object.values(brand.social).filter(Boolean),
+    sameAs: [
+      settings.discord,
+      settings.whatsapp,
+      settings.instagram,
+      settings.tiktok,
+    ].filter(Boolean),
   };
 
   return (

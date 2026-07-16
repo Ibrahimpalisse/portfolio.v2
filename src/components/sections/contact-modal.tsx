@@ -13,9 +13,13 @@ import { CONTACT_MODAL_TITLE_ID } from "@/lib/modal-a11y-ids";
 
 type ContactModalProps = {
   showCallout?: boolean;
+  contactEmail: string;
 };
 
-export function ContactModal({ showCallout = true }: ContactModalProps) {
+export function ContactModal({
+  showCallout = true,
+  contactEmail,
+}: ContactModalProps) {
   const t = useTranslations("common");
   const locale = useLocale();
   const [open, setOpen] = useState(false);
@@ -101,7 +105,7 @@ export function ContactModal({ showCallout = true }: ContactModalProps) {
                 </button>
 
                 <div className="p-4 sm:p-6">
-                  <ContactForm key={locale} />
+                  <ContactForm key={locale} contactEmail={contactEmail} />
                 </div>
               </motion.div>
             </div>

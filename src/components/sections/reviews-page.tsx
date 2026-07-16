@@ -2,19 +2,27 @@
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, PenLine } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { openLeaveReviewModal } from "@/lib/open-leave-review-modal";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageBackBar, pageShellClass } from "@/components/page-back-link";
 import { Button } from "@/components/ui/button";
 import { ReviewCard } from "@/components/sections/review-card";
-import { reviews } from "@/data/reviews";
+import { ReviewDetailModal } from "@/components/sections/review-detail-modal";
+import type { ReviewItem } from "@/data/reviews";
 import { routes } from "@/lib/routes";
 import { paginateReviews, REVIEWS_PAGE_SIZE } from "@/lib/reviews-config";
 import { cn } from "@/lib/utils";
 
-export function ReviewsPage() {
+type ReviewsPageProps = {
+  reviews: ReviewItem[];
+};
+
+export function ReviewsPage({ reviews }: ReviewsPageProps) {
+  const t = useTranslations("reviews");
   const [page, setPage] = useState(1);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const { items, totalPages, total, page: currentPage } = paginateReviews(
     reviews,
     page
@@ -27,19 +35,19 @@ export function ReviewsPage() {
       <div className={pageShellClass}>
         <SectionHeading
           className="mt-8"
-          eyebrow="Témoignages"
+          eyebrow={t("eyebrow")}
           title={
             <>
-              Tous les <span className="text-gradient">avis</span>
+              {t("title")} <span className="text-gradient">{t("titleHighlight")}</span>
             </>
           }
-          subtitle={`${total} avis publiés — ${REVIEWS_PAGE_SIZE} par page.`}
+          subtitle={`${total} — ${REVIEWS_PAGE_SIZE}/page`}
         />
 
         <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-14 md:grid-cols-2 lg:mt-16 lg:grid-cols-3">
           {items.map((r, i) => (
             <Reveal key={r.id} delay={i * 0.04}>
-              <ReviewCard review={r} />
+              <ReviewCard review={r} onOpen={() => setOpenIndex(i)} />
             </Reveal>
           ))}
         </div>
@@ -48,7 +56,7 @@ export function ReviewsPage() {
           <Reveal delay={0.1}>
             <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
               <p className="text-sm text-foreground/50">
-                Page {currentPage} sur {totalPages}
+                {t("page", { current: currentPage, total: totalPages })}
               </p>
               <div className="flex items-center gap-2">
                 <Button
@@ -56,10 +64,13 @@ export function ReviewsPage() {
                   variant="outline"
                   size="sm"
                   disabled={currentPage <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  onClick={() => {
+                    setOpenIndex(null);
+                    setPage((p) => Math.max(1, p - 1));
+                  }}
                 >
-                  <ChevronLeft className="h-4 w-4" />
-                  Précédent
+                  <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
+                  {t("prev")}
                 </Button>
                 <div className="hidden items-center gap-1 sm:flex">
                   {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -79,7 +90,10 @@ export function ReviewsPage() {
                           )}
                           <button
                             type="button"
-                            onClick={() => setPage(p)}
+                            onClick={() => {
+                              setOpenIndex(null);
+                              setPage(p);
+                            }}
                             className={cn(
                               "flex h-9 min-w-9 items-center justify-center rounded-full border px-2 text-sm transition-colors",
                               p === currentPage
@@ -98,10 +112,13 @@ export function ReviewsPage() {
                   variant="outline"
                   size="sm"
                   disabled={currentPage >= totalPages}
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  onClick={() => {
+                    setOpenIndex(null);
+                    setPage((p) => Math.min(totalPages, p + 1));
+                  }}
                 >
-                  Suivant
-                  <ChevronRight className="h-4 w-4" />
+                  {t("next")}
+                  <ChevronRight className="h-4 w-4 rtl:rotate-180" />
                 </Button>
               </div>
             </div>
@@ -115,12 +132,19 @@ export function ReviewsPage() {
               size="lg"
               onClick={() => openLeaveReviewModal()}
             >
-              Laisser un avis
+              {t("leaveReview")}
               <PenLine className="h-4 w-4" />
             </Button>
           </div>
         </Reveal>
       </div>
+
+      <ReviewDetailModal
+        reviews={items}
+        index={openIndex}
+        onClose={() => setOpenIndex(null)}
+        onIndexChange={setOpenIndex}
+      />
     </section>
   );
 }

@@ -7,7 +7,9 @@ import { ScrollRestoration } from "@/components/scroll-restoration";
 import { SkipToContent } from "@/components/skip-to-content";
 import { LeaveReviewModal } from "@/components/sections/leave-review-modal";
 import { ContactModal } from "@/components/sections/contact-modal";
+import { AppToastHost } from "@/components/ui/app-toast";
 import { type Locale, routing } from "@/i18n/routing";
+import { getPublicContactEmail } from "@/lib/social/store";
 
 type SiteLayoutProps = {
   children: React.ReactNode;
@@ -21,6 +23,8 @@ export default async function SiteLayout({ children, params }: SiteLayoutProps) 
     setRequestLocale(locale as Locale);
   }
 
+  const contactEmail = await getPublicContactEmail();
+
   return (
     <>
       <SkipToContent />
@@ -32,7 +36,8 @@ export default async function SiteLayout({ children, params }: SiteLayoutProps) 
       </main>
       <Footer />
       <LeaveReviewModal showCallout={false} />
-      <ContactModal showCallout={false} />
+      <ContactModal showCallout={false} contactEmail={contactEmail} />
+      <AppToastHost />
     </>
   );
 }

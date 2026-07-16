@@ -26,7 +26,7 @@ export function buildReviewEmail(data: ReviewPayload): ReviewEmailContent {
     fields.push(
       emailField(
         "Email",
-        `<a href="mailto:${escapeHtml(email)}" style="color:#171717;">${escapeHtml(email)}</a>`
+        `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>`
       )
     );
   }
@@ -37,10 +37,7 @@ export function buildReviewEmail(data: ReviewPayload): ReviewEmailContent {
 
   fields.push(emailField("Message", escapeHtmlWithBreaks(message)));
 
-  const bodyHtml = [
-    `<h1 style="margin:0 0 16px;font-size:20px;">Nouvel avis client</h1>`,
-    ...fields,
-  ].join("");
+  const bodyHtml = ["<h1>Nouvel avis client</h1>", ...fields].join("");
 
   const html = wrapEmailLayout({
     title: "Nouvel avis client",

@@ -1,18 +1,19 @@
 import { getTranslations } from "next-intl/server";
 import { brand } from "@/lib/brand";
+import { aboutStatsToDisplay } from "@/data/about-stats";
+import { getAboutStats } from "@/lib/about/store";
 import { AnimatedNumber } from "@/components/ui/animated-number";
 import { Reveal } from "@/components/ui/reveal";
 import { ProcessStepper } from "@/components/ui/process-stepper";
 
-const stats = [
-  { value: 2.5, decimals: 1, labelKey: "years" as const },
-  { value: 1, labelKey: "clients" as const },
-  { value: 4, labelKey: "projects" as const },
-  { value: 48, suffix: "h", labelKey: "response" as const },
-] as const;
-
-export async function About() {
+export async function About({
+  variant = "section",
+}: {
+  variant?: "section" | "page";
+} = {}) {
   const t = await getTranslations("about");
+  const stats = aboutStatsToDisplay(await getAboutStats());
+  const HeadingTag = variant === "page" ? "h1" : "h2";
 
   return (
     <section
@@ -27,10 +28,10 @@ export async function About() {
             </span>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-4 font-display-serif text-3xl font-semibold tracking-tight sm:mt-5 sm:text-4xl md:text-5xl">
+            <HeadingTag className="mt-4 font-display-serif text-3xl font-semibold tracking-tight sm:mt-5 sm:text-4xl md:text-5xl">
               {t("title")}{" "}
               <span className="text-gradient">{t("titleHighlight")}</span>
-            </h2>
+            </HeadingTag>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-4 text-base leading-relaxed text-foreground/60 sm:mt-5 sm:text-lg">
@@ -54,18 +55,18 @@ export async function About() {
           <div className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-4 sm:mt-16 lg:mt-20">
             {stats.map((s) => (
               <div
-                key={s.labelKey}
+                key={s.id}
                 className="rounded-2xl border border-step-accent/20 bg-background/70 p-4 text-center backdrop-blur-sm transition-colors hover:border-step-accent/40 sm:p-6"
               >
                 <div className="font-display-serif text-3xl font-semibold text-gradient sm:text-4xl">
                   <AnimatedNumber
                     value={s.value}
-                    decimals={"decimals" in s ? s.decimals : 0}
-                    suffix={"suffix" in s ? s.suffix : ""}
+                    decimals={s.decimals}
+                    suffix={s.suffix ?? ""}
                   />
                 </div>
                 <div className="mt-2 text-sm text-foreground/55">
-                  {t(`stats.${s.labelKey}`)}
+                  {t(`stats.${s.id}`)}
                 </div>
               </div>
             ))}

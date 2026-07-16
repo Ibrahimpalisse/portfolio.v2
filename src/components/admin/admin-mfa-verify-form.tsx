@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/form-error";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
+import { readAdminApiError } from "@/lib/admin/api-error";
 import { getSubmitCooldownMessage, useSubmitGuard } from "@/hooks/use-submit-guard";
 import { ADMIN_ROUTES } from "@/lib/admin/constants";
 import {
@@ -23,17 +24,20 @@ export type AdminMfaChallengeState = {
 
 type AdminMfaVerifyFormProps = {
   challenge: AdminMfaChallengeState;
+  redirectTo?: string;
   onChallengeRefresh: (next: AdminMfaChallengeState) => void;
   onCancel: () => void;
 };
 
 export function AdminMfaVerifyForm({
   challenge,
+  redirectTo = ADMIN_ROUTES.home,
   onChallengeRefresh,
   onCancel,
 }: AdminMfaVerifyFormProps) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState("");
+  const codeInputRef = useRef<HTMLInputElement | null>(null);
   const { loading, setLoading, trySubmit } = useSubmitGuard();
 
   const {
@@ -41,6 +45,7 @@ export function AdminMfaVerifyForm({
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<AdminMfaVerifyValues>({
     resolver: zodResolver(adminMfaVerifySchema),
     defaultValues: {
@@ -49,6 +54,14 @@ export function AdminMfaVerifyForm({
       challengeId: challenge.challengeId,
     },
   });
+
+  const { ref: codeRegisterRef, ...codeRegister } = register("code", {
+    setValueAs: (v: string) => String(v ?? "").replace(/\s+/g, ""),
+  });
+
+  useEffect(() => {
+    codeInputRef.current?.focus();
+  }, [challenge.challengeId]);
 
   const refreshChallenge = async () => {
     const res = await fetch("/api/admin/mfa/challenge", {
@@ -69,7 +82,9 @@ export function AdminMfaVerifyForm({
       return true;
     }
 
-    setSubmitError(body?.error ?? "Session expirée. Reconnectez-vous.");
+    setSubmitError(
+      readAdminApiError(res, body, "Session expirée. Reconnectez-vous.")
+    );
     return false;
   };
 
@@ -100,20 +115,25 @@ export function AdminMfaVerifyForm({
       } | null;
 
       if (res.ok) {
-        router.push(body?.redirectTo ?? ADMIN_ROUTES.home);
+        router.push(body?.redirectTo ?? redirectTo);
         router.refresh();
+        return;
+      }
+
+      if (res.status === 429) {
+        setSubmitError(readAdminApiError(res, body));
         return;
       }
 
       if (res.status === 401) {
         const refreshed = await refreshChallenge();
         if (refreshed) {
-          setSubmitError(body?.error ?? "Code invalide. Un nouveau code a été demandé.");
+          setSubmitError(body?.error ?? "Code invalide. Réessayez.");
           return;
         }
       }
 
-      setSubmitError(body?.error ?? "Vérification impossible.");
+      setSubmitError(readAdminApiError(res, body, "Vérification impossible."));
     } catch {
       setSubmitError("Vérification impossible. Réessayez.");
     } finally {
@@ -122,7 +142,12 @@ export function AdminMfaVerifyForm({
   });
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5" noValidate>
+    <form
+      onSubmit={onSubmit}
+      className="space-y-5"
+      noValidate
+      aria-label="Vérification TOTP admin"
+    >
       <input type="hidden" {...register("factorId")} />
       <input type="hidden" {...register("challengeId")} />
 
@@ -136,7 +161,12 @@ export function AdminMfaVerifyForm({
 
       {submitError && <FormError message={submitError} />}
 
-      <FormField id="admin-mfa-code" label="Code à 6 chiffres" error={errors.code?.message}>
+      <FormField
+        id="admin-mfa-code"
+        label="Code à 6 chiffres"
+        required
+        error={errors.code?.message}
+      >
         <Input
           id="admin-mfa-code"
           type="text"
@@ -147,7 +177,17 @@ export function AdminMfaVerifyForm({
           placeholder="000000"
           className="text-center text-lg tracking-[0.35em]"
           disabled={loading}
-          {...register("code")}
+          aria-invalid={Boolean(errors.code)}
+          aria-describedby={errors.code ? "admin-mfa-code-error" : undefined}
+          {...codeRegister}
+          ref={(el) => {
+            codeRegisterRef(el);
+            codeInputRef.current = el;
+          }}
+          onChange={(e) => {
+            const next = e.target.value.replace(/\D/g, "").slice(0, 6);
+            setValue("code", next, { shouldValidate: true });
+          }}
         />
       </FormField>
 

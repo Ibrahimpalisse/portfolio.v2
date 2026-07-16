@@ -13,6 +13,7 @@ import { lockBodyScroll } from "@/lib/lock-body-scroll";
 import { useModalA11y } from "@/hooks/use-modal-a11y";
 import { PROJECT_MODAL_TITLE_ID } from "@/lib/modal-a11y-ids";
 import { isSafeHttpUrl } from "@/lib/review-schema";
+import { ProjectTypeBadges } from "@/components/sections/project-type-badges";
 
 export type ProjectImage = {
   src: string;
@@ -25,6 +26,8 @@ export type ProjectItem = {
   category: string;
   desc: string;
   tags: string[];
+  /** Types métier (boutique, vitrine…). */
+  businessTypeIds?: string[];
   images: ProjectImage[];
   link?: string;
 };
@@ -95,7 +98,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 24, scale: 0.98 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative my-auto w-full max-w-5xl overflow-hidden rounded-xl border border-border bg-background p-4 shadow-2xl sm:rounded-2xl sm:p-6 md:p-8"
+              className="relative my-auto w-full max-w-3xl overflow-hidden rounded-xl border border-border bg-background p-4 shadow-2xl sm:rounded-2xl sm:p-6 md:p-7"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -122,14 +125,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   {project.desc}
                 </p>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-border bg-muted px-3 py-1 text-xs text-foreground/60"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <ProjectTypeBadges
+                    businessTypeIds={project.businessTypeIds}
+                    tags={project.tags}
+                    className="mt-0"
+                  />
                   {project.link && isSafeHttpUrl(project.link) && (
                     <a
                       href={project.link}
@@ -144,7 +144,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </div>
               </div>
 
-              <div className="relative overflow-hidden px-1 py-2">
+              <div className="relative mx-auto w-full max-w-xl overflow-hidden px-1 py-2 sm:max-w-2xl">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${project.id}-${index}`}
@@ -156,6 +156,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     <BrowserPreview3D
                       image={current.src}
                       title={`${project.title} — ${current.label ?? index + 1}`}
+                      className="mx-auto"
                     />
                   </motion.div>
                 </AnimatePresence>

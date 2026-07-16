@@ -1,3 +1,10 @@
+import {
+  SITE_SOCIAL_LABELS,
+  type SiteSocialId,
+  type SiteSocialLinks,
+} from "@/data/site-social";
+import { getSiteSocialLinks } from "@/lib/social/store";
+
 export const brand = {
   name: "Vignes Ibrahim",
   owner: "Vignes Ibrahim",
@@ -10,38 +17,52 @@ export const brand = {
   heroBannerDark: "/images/hero-banner-dark.jpg",
   heroBannerDarkAlt:
     "Espace de travail en ambiance sombre — portfolio et sites web sur-mesure",
-  email: "contact@zishi.dev",
+  email: "contact@zishi.dev", // fallback display — sourcé BDD via getPublicContactEmail()
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://zishi.dev",
   description:
     "Développeur web, backend & designer freelance. Sites et applications sur-mesure par Vignes Ibrahim.",
   preferredContactText: "Contact préféré · Discord",
-  /**
-   * Réseaux sociaux — laisse vide pour afficher l'icône grisée (non cliquable).
-   * WhatsApp : https://wa.me/33612345678 (indicatif sans +)
-   * Discord : https://discord.gg/ton-invite ou profil
-   */
-  social: {
-    discord: "",
-    whatsapp: "",
-    instagram: "",
-    tiktok: "",
-  },
 } as const;
 
-export type FooterSocialId = "discord" | "whatsapp" | "instagram" | "tiktok";
+export type { SiteSocialId as FooterSocialId, SiteSocialLinks };
 
 export type FooterSocialLink = {
-  id: FooterSocialId;
+  id: SiteSocialId;
   label: string;
   href: string;
   preferred?: boolean;
 };
 
-export function getFooterSocials(): FooterSocialLink[] {
+export function buildFooterSocials(
+  social: SiteSocialLinks
+): FooterSocialLink[] {
   return [
-    { id: "discord", label: "Discord", href: brand.social.discord, preferred: true },
-    { id: "whatsapp", label: "WhatsApp", href: brand.social.whatsapp },
-    { id: "instagram", label: "Instagram", href: brand.social.instagram },
-    { id: "tiktok", label: "TikTok", href: brand.social.tiktok },
+    {
+      id: "discord",
+      label: SITE_SOCIAL_LABELS.discord,
+      href: social.discord,
+      preferred: true,
+    },
+    {
+      id: "whatsapp",
+      label: SITE_SOCIAL_LABELS.whatsapp,
+      href: social.whatsapp,
+    },
+    {
+      id: "instagram",
+      label: SITE_SOCIAL_LABELS.instagram,
+      href: social.instagram,
+    },
+    {
+      id: "tiktok",
+      label: SITE_SOCIAL_LABELS.tiktok,
+      href: social.tiktok,
+    },
   ];
+}
+
+/** Liens footer : sourcés depuis Supabase (admin /settings), sinon vides. */
+export async function getFooterSocials(): Promise<FooterSocialLink[]> {
+  const social = await getSiteSocialLinks();
+  return buildFooterSocials(social);
 }

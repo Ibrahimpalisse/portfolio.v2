@@ -1,9 +1,8 @@
 "use client";
 
-import { hasLocale } from "next-intl";
-import { useParams } from "next/navigation";
+import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { locales, localeLabels, routing, type Locale } from "@/i18n/routing";
+import { locales, localeLabels, type Locale } from "@/i18n/routing";
 import { markLocaleChange, setNextLocaleCookie } from "@/lib/locale-cookie";
 import { cn } from "@/lib/utils";
 
@@ -14,17 +13,10 @@ type LanguageSwitcherProps = {
   embedded?: boolean;
 };
 
-function getLocaleFromParams(params: Record<string, string | string[] | undefined>): Locale {
-  const value = params.locale;
-  const candidate = Array.isArray(value) ? value[0] : value;
-  return hasLocale(routing.locales, candidate) ? candidate : routing.defaultLocale;
-}
-
 export function LanguageSwitcher({ className, compact, embedded }: LanguageSwitcherProps) {
-  const params = useParams();
   const pathname = usePathname();
   const router = useRouter();
-  const locale = getLocaleFromParams(params);
+  const locale = useLocale() as Locale;
 
   function switchLocale(code: Locale) {
     if (code === locale) return;
@@ -34,6 +26,7 @@ export function LanguageSwitcher({ className, compact, embedded }: LanguageSwitc
     if (!setNextLocaleCookie(code)) return;
 
     markLocaleChange();
+    // localePrefix: never → même URL, cookie + refresh
     router.replace(pathname, { locale: code, scroll: false });
 
     if (!hash) return;

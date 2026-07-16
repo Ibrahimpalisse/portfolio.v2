@@ -10,7 +10,7 @@ export async function createSupabaseServerClient() {
 
   const cookieStore = await cookies();
 
-  return createServerClient(config.config.url, config.config.anonKey, {
+  const client = createServerClient(config.config.url, config.config.anonKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
@@ -26,6 +26,13 @@ export async function createSupabaseServerClient() {
       },
     },
   });
+
+  // Cookies = storage non fiable : ne pas warn sur session.user (toujours getUser()).
+  (
+    client.auth as unknown as { suppressGetSessionWarning: boolean }
+  ).suppressGetSessionWarning = true;
+
+  return client;
 }
 
 /** Utilisateur authentifié — toujours via getUser() (validation JWT côté Supabase). */
