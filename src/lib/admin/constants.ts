@@ -15,8 +15,8 @@ export const ADMIN_LOGIN_LIMITS = {
   minPasswordLength: 8,
   maxPasswordLength: 128,
   maxEmailLength: 254,
-  /** Taille max corps JSON login (email + password + turnstile). */
-  maxBodyBytes: 4_096,
+  /** Taille max corps JSON login (email + password + token Turnstile). */
+  maxBodyBytes: 16_384,
 } as const;
 
 /** OWASP A07 — lockout soft par email (en complément du rate-limit IP). */

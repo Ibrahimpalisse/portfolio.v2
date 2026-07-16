@@ -13,7 +13,7 @@ export const adminLoginSchema = z.object({
     .min(ADMIN_LOGIN_LIMITS.minPasswordLength, "Mot de passe trop court.")
     .max(ADMIN_LOGIN_LIMITS.maxPasswordLength, "Mot de passe trop long."),
   _honeypot: z.string().optional(),
-  turnstileToken: z.string().max(2048).optional(),
+  turnstileToken: z.string().max(8192).optional(),
 });
 
 export type AdminLoginValues = z.infer<typeof adminLoginSchema>;

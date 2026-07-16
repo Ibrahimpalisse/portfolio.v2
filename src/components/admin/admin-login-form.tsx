@@ -104,8 +104,10 @@ export function AdminLoginForm({
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
         body: JSON.stringify({
-          ...values,
-          ...(turnstileToken ? { turnstileToken } : {}),
+          email: values.email,
+          password: values.password,
+          _honeypot: values._honeypot ?? "",
+          turnstileToken: turnstileToken || undefined,
         }),
       });
 

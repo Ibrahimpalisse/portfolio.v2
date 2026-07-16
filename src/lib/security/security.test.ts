@@ -119,6 +119,12 @@ describe("OWASP A01 — verifyFormRequestOrigin (CSRF / accès direct API)", () 
     assert.ok(isAllowedFormOrigin("https://zishi.dev", allowed));
   });
 
+  it("autorise aussi www quand le site est en apex", () => {
+    process.env.NEXT_PUBLIC_SITE_URL = "https://zishi.dev";
+    const allowed = getAllowedFormOrigins();
+    assert.ok(isAllowedFormOrigin("https://www.zishi.dev", allowed));
+  });
+
   it("rejette une origine malveillante en production", () => {
     process.env.NEXT_PUBLIC_SITE_URL = "https://zishi.dev";
     const request = new Request("https://zishi.dev/api/contact", {

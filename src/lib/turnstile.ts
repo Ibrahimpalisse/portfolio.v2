@@ -16,20 +16,26 @@ export async function verifyTurnstileToken(
   token: string,
   remoteIp: string
 ): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
+  const secret = process.env.TURNSTILE_SECRET_KEY?.trim();
   if (!secret) return true;
 
-  if (!token || typeof token !== "string") return false;
+  const response = token.trim();
+  if (!response) return false;
 
   try {
+    const params = new URLSearchParams({
+      secret,
+      response,
+    });
+    // IP optionnelle : une IP mal formée peut faire échouer siteverify.
+    if (remoteIp && remoteIp !== "unknown") {
+      params.set("remoteip", remoteIp);
+    }
+
     const res = await fetch(SITEVERIFY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        secret,
-        response: token,
-        remoteip: remoteIp,
-      }),
+      body: params,
       signal: AbortSignal.timeout(FORM_SECURITY.TURNSTILE_TIMEOUT_MS),
     });
 
@@ -40,7 +46,14 @@ export async function verifyTurnstileToken(
 
     const data = (await res.json()) as SiteverifyResponse;
     if (!data.success) {
-      console.error("[turnstile] verification failed", data["error-codes"]);
+      const codes = data["error-codes"] ?? [];
+      console.error("[turnstile] verification failed", codes);
+      // Aide au diagnostic Vercel : secret de test vs token réel, etc.
+      if (codes.includes("invalid-input-secret")) {
+        console.error(
+          "[turnstile] Secret key invalide ou ne correspond pas à la site key du widget"
+        );
+      }
     }
     return data.success;
   } catch (err) {

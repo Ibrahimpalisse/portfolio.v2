@@ -11,22 +11,40 @@ function parseOrigin(value: string): string | null {
   }
 }
 
+/** Ajoute apex + www pour le même domaine (redirections Vercel). */
+function addSiteOriginVariants(origins: Set<string>, siteUrl: string) {
+  const origin = parseOrigin(siteUrl);
+  if (!origin) return;
+
+  origins.add(origin);
+
+  try {
+    const url = new URL(siteUrl);
+    const host = url.hostname;
+    if (host.startsWith("www.")) {
+      origins.add(`${url.protocol}//${host.slice(4)}`);
+    } else if (host.includes(".")) {
+      origins.add(`${url.protocol}//www.${host}`);
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 /** Origines autorisées pour les POST formulaire (anti-CSRF / anti-abus direct API). */
 export function getAllowedFormOrigins(): Set<string> {
   const origins = new Set<string>();
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (siteUrl) {
-    const origin = parseOrigin(siteUrl);
-    if (origin) origins.add(origin);
+    addSiteOriginVariants(origins, siteUrl);
   }
 
   const extras = process.env.FORM_ALLOWED_ORIGINS?.split(",") ?? [];
   for (const entry of extras) {
     const trimmed = entry.trim();
     if (!trimmed) continue;
-    const origin = parseOrigin(trimmed);
-    if (origin) origins.add(origin);
+    addSiteOriginVariants(origins, trimmed);
   }
 
   if (process.env.NODE_ENV !== "production") {
